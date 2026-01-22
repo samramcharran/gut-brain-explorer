@@ -230,8 +230,10 @@ function createBubbleChart(data, conditionFilter = 'all', bacteriaFilter = 'all'
                     min: -0.5,
                     max: data.bacteria.length - 0.5,
                     ticks: {
+                        stepSize: 1,
                         callback: function(value) {
-                            return data.bacteria[Math.round(value)] || '';
+                            if (value < 0 || value >= data.bacteria.length) return '';
+                            return data.bacteria[value] || '';
                         },
                         maxRotation: 45,
                         minRotation: 45
@@ -246,8 +248,10 @@ function createBubbleChart(data, conditionFilter = 'all', bacteriaFilter = 'all'
                     min: -0.5,
                     max: data.conditions.length - 0.5,
                     ticks: {
+                        stepSize: 1,
                         callback: function(value) {
-                            return data.conditions[Math.round(value)] || '';
+                            if (value < 0 || value >= data.conditions.length) return '';
+                            return data.conditions[value] || '';
                         }
                     },
                     title: {
