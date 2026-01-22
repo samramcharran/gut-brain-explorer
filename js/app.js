@@ -67,6 +67,26 @@ function escapeHtml(text) {
     return div.innerHTML;
 }
 
+// ===== Age Filter Helpers =====
+function matchesAgeFilter(association, ageFilter) {
+    if (ageFilter === 'all') return true;
+    if (!association.age_ranges || association.age_ranges.length === 0) {
+        return false; // No age data = not highlighted
+    }
+    return association.age_ranges.includes(ageFilter);
+}
+
+function updateAgeFilterStatus(ageFilter) {
+    const statusDiv = document.getElementById('age-filter-status');
+    const labelSpan = document.getElementById('age-filter-label');
+    if (ageFilter !== 'all') {
+        statusDiv.classList.remove('hidden');
+        labelSpan.textContent = ageFilter;
+    } else {
+        statusDiv.classList.add('hidden');
+    }
+}
+
 // ===== Filter Population =====
 function populateFilters() {
     const conditionFilter = document.getElementById('condition-filter');
@@ -106,7 +126,7 @@ function getEffectColor(effect) {
     }
 }
 
-function createBubbleChart(data, conditionFilter = 'all', bacteriaFilter = 'all') {
+function createBubbleChart(data, conditionFilter = 'all', bacteriaFilter = 'all', ageFilter = 'all') {
     const ctx = document.getElementById('main-chart').getContext('2d');
 
     // Filter data
@@ -118,7 +138,7 @@ function createBubbleChart(data, conditionFilter = 'all', bacteriaFilter = 'all'
         filtered = filtered.filter(a => a.bacteria === bacteriaFilter);
     }
 
-    // Prepare bubble data
+    // Prepare bubble data with age highlighting
     const bubbleData = filtered.map(a => ({
         x: data.bacteria.indexOf(a.bacteria),
         y: data.conditions.indexOf(a.condition),
@@ -127,7 +147,9 @@ function createBubbleChart(data, conditionFilter = 'all', bacteriaFilter = 'all'
         condition: a.condition,
         count: a.study_count,
         effect: a.effect,
-        pmids: a.pmids
+        pmids: a.pmids,
+        age_ranges: a.age_ranges || [],
+        ageHighlighted: matchesAgeFilter(a, ageFilter)
     }));
 
     // Group by effect for coloring
@@ -135,28 +157,42 @@ function createBubbleChart(data, conditionFilter = 'all', bacteriaFilter = 'all'
     const enrichedData = bubbleData.filter(d => d.effect === 'enriched');
     const variedData = bubbleData.filter(d => d.effect === 'varied');
 
+    // Apply conditional styling based on age highlighting
+    const applyAgeHighlighting = (dataArray, baseColor, baseBorder) => {
+        if (ageFilter === 'all') {
+            return {
+                backgroundColor: baseColor,
+                borderColor: baseBorder,
+                borderWidth: 2
+            };
+        }
+        return {
+            backgroundColor: dataArray.map(d =>
+                d.ageHighlighted ? baseColor : baseColor.replace(/[\d.]+\)$/, '0.2)')
+            ),
+            borderColor: dataArray.map(d =>
+                d.ageHighlighted ? '#f77f00' : baseBorder.replace(/[\d.]+\)$/, '0.4)')
+            ),
+            borderWidth: dataArray.map(d => d.ageHighlighted ? 3 : 1)
+        };
+    };
+
     const chartData = {
         datasets: [
             {
                 label: 'Beneficial/Depleted',
                 data: beneficialData,
-                backgroundColor: COLORS.beneficial,
-                borderColor: COLORS.beneficialBorder,
-                borderWidth: 2
+                ...applyAgeHighlighting(beneficialData, COLORS.beneficial, COLORS.beneficialBorder)
             },
             {
                 label: 'Enriched',
                 data: enrichedData,
-                backgroundColor: COLORS.enriched,
-                borderColor: COLORS.enrichedBorder,
-                borderWidth: 2
+                ...applyAgeHighlighting(enrichedData, COLORS.enriched, COLORS.enrichedBorder)
             },
             {
                 label: 'Varied',
                 data: variedData,
-                backgroundColor: COLORS.varied,
-                borderColor: COLORS.variedBorder,
-                borderWidth: 2
+                ...applyAgeHighlighting(variedData, COLORS.varied, COLORS.variedBorder)
             }
         ]
     };
@@ -233,7 +269,7 @@ function createBubbleChart(data, conditionFilter = 'all', bacteriaFilter = 'all'
     });
 }
 
-function createBarChart(data, conditionFilter = 'all', bacteriaFilter = 'all') {
+function createBarChart(data, conditionFilter = 'all', bacteriaFilter = 'all', ageFilter = 'all') {
     const ctx = document.getElementById('main-chart').getContext('2d');
 
     let filtered = data.associations;
@@ -244,11 +280,13 @@ function createBarChart(data, conditionFilter = 'all', bacteriaFilter = 'all') {
         filtered = filtered.filter(a => a.bacteria === bacteriaFilter);
     }
 
-    // Aggregate by bacteria
+    // Aggregate by bacteria, tracking age relevance
     const bacteriaCounts = {};
+    const bacteriaHasAgeMatch = {};
     filtered.forEach(a => {
         if (!bacteriaCounts[a.bacteria]) {
             bacteriaCounts[a.bacteria] = { beneficial: 0, enriched: 0, varied: 0 };
+            bacteriaHasAgeMatch[a.bacteria] = false;
         }
         if (a.effect === 'beneficial' || a.effect === 'depleted') {
             bacteriaCounts[a.bacteria].beneficial += a.study_count;
@@ -257,12 +295,36 @@ function createBarChart(data, conditionFilter = 'all', bacteriaFilter = 'all') {
         } else {
             bacteriaCounts[a.bacteria].varied += a.study_count;
         }
+        // Track if any association for this bacteria matches age filter
+        if (matchesAgeFilter(a, ageFilter)) {
+            bacteriaHasAgeMatch[a.bacteria] = true;
+        }
     });
 
     const labels = Object.keys(bacteriaCounts).sort();
     const beneficialData = labels.map(b => bacteriaCounts[b].beneficial);
     const enrichedData = labels.map(b => bacteriaCounts[b].enriched);
     const variedData = labels.map(b => bacteriaCounts[b].varied);
+
+    // Apply age-based highlighting to bar colors
+    const getBarColors = (baseColor, baseBorder) => {
+        if (ageFilter === 'all') {
+            return {
+                backgroundColor: baseColor,
+                borderColor: baseBorder,
+                borderWidth: 1
+            };
+        }
+        return {
+            backgroundColor: labels.map(b =>
+                bacteriaHasAgeMatch[b] ? baseColor : baseColor.replace(/[\d.]+\)$/, '0.2)')
+            ),
+            borderColor: labels.map(b =>
+                bacteriaHasAgeMatch[b] ? '#f77f00' : baseBorder.replace(/[\d.]+\)$/, '0.4)')
+            ),
+            borderWidth: labels.map(b => bacteriaHasAgeMatch[b] ? 2 : 1)
+        };
+    };
 
     if (mainChart) {
         mainChart.destroy();
@@ -276,23 +338,17 @@ function createBarChart(data, conditionFilter = 'all', bacteriaFilter = 'all') {
                 {
                     label: 'Beneficial/Depleted',
                     data: beneficialData,
-                    backgroundColor: COLORS.beneficial,
-                    borderColor: COLORS.beneficialBorder,
-                    borderWidth: 1
+                    ...getBarColors(COLORS.beneficial, COLORS.beneficialBorder)
                 },
                 {
                     label: 'Enriched',
                     data: enrichedData,
-                    backgroundColor: COLORS.enriched,
-                    borderColor: COLORS.enrichedBorder,
-                    borderWidth: 1
+                    ...getBarColors(COLORS.enriched, COLORS.enrichedBorder)
                 },
                 {
                     label: 'Varied',
                     data: variedData,
-                    backgroundColor: COLORS.varied,
-                    borderColor: COLORS.variedBorder,
-                    borderWidth: 1
+                    ...getBarColors(COLORS.varied, COLORS.variedBorder)
                 }
             ]
         },
@@ -365,7 +421,7 @@ function showBarChartDetails(bacteria, associations, counts) {
     contentDiv.appendChild(conditionsP);
 }
 
-function createHeatmap(data, conditionFilter = 'all', bacteriaFilter = 'all') {
+function createHeatmap(data, conditionFilter = 'all', bacteriaFilter = 'all', ageFilter = 'all') {
     // Replace canvas with HTML table-based heatmap for true grid appearance
     const chartContainer = document.querySelector('.chart-container');
     const canvas = document.getElementById('main-chart');
@@ -431,12 +487,19 @@ function createHeatmap(data, conditionFilter = 'all', bacteriaFilter = 'all') {
                 const intensity = getIntensity(assoc.study_count);
                 const bgColor = getColorForEffect(assoc.effect, intensity);
                 const textColor = intensity > 0.6 ? 'white' : 'inherit';
-                html += `<td class="heatmap-cell" style="background-color: ${bgColor}; color: ${textColor};"
+
+                // Age highlighting
+                const isAgeRelevant = matchesAgeFilter(assoc, ageFilter);
+                const highlightClass = (ageFilter !== 'all' && isAgeRelevant) ? ' age-highlighted' : '';
+                const dimmedStyle = (ageFilter !== 'all' && !isAgeRelevant) ? 'opacity: 0.35;' : '';
+
+                html += `<td class="heatmap-cell${highlightClass}" style="background-color: ${bgColor}; color: ${textColor}; ${dimmedStyle}"
                     data-bacteria="${escapeHtml(bact)}"
                     data-condition="${escapeHtml(condition)}"
                     data-count="${assoc.study_count}"
                     data-effect="${assoc.effect}"
                     data-pmids="${(assoc.pmids || []).join(',')}"
+                    data-age-ranges="${(assoc.age_ranges || []).join(',')}"
                     title="${bact} + ${condition}: ${assoc.study_count} studies (${assoc.effect})">
                     ${assoc.study_count}
                 </td>`;
@@ -449,10 +512,10 @@ function createHeatmap(data, conditionFilter = 'all', bacteriaFilter = 'all') {
 
     html += '</tbody></table>';
     html += '<div class="heatmap-legend">';
-    html += '<span class="heatmap-legend-item"><span class="heatmap-swatch" style="background: rgba(64,145,108,0.7)"></span> Lower in condition</span>';
-    html += '<span class="heatmap-legend-item"><span class="heatmap-swatch" style="background: rgba(230,57,70,0.7)"></span> Higher in condition</span>';
-    html += '<span class="heatmap-legend-item"><span class="heatmap-swatch" style="background: rgba(157,78,221,0.7)"></span> Mixed results</span>';
-    html += '<span class="heatmap-legend-note">Cell color intensity = number of studies</span>';
+    html += '<span class="heatmap-legend-item"><span class="heatmap-swatch" style="background: rgba(64,145,108,0.7)"></span> Depleted in condition<span class="legend-tooltip">This bacteria is typically found at lower levels in people with this condition. Often these are protective or beneficial species.</span></span>';
+    html += '<span class="heatmap-legend-item"><span class="heatmap-swatch" style="background: rgba(230,57,70,0.7)"></span> Enriched in condition<span class="legend-tooltip">This bacteria is typically found at higher levels in people with this condition. May indicate dysbiosis or an imbalanced microbiome.</span></span>';
+    html += '<span class="heatmap-legend-item"><span class="heatmap-swatch" style="background: rgba(157,78,221,0.7)"></span> Mixed results<span class="legend-tooltip">Research shows inconsistent results across studies. Effects may depend on specific strains, diet, or other factors.</span></span>';
+    html += '<span class="heatmap-legend-note">Cell intensity shows number of studies (darker = more research)</span>';
     html += '</div></div>';
 
     // Replace chart container content
@@ -462,12 +525,14 @@ function createHeatmap(data, conditionFilter = 'all', bacteriaFilter = 'all') {
     chartContainer.querySelectorAll('.heatmap-cell:not(.heatmap-empty)').forEach(cell => {
         cell.addEventListener('click', function() {
             const pmidsStr = this.dataset.pmids;
+            const ageRangesStr = this.dataset.ageRanges;
             showAssociationDetails({
                 bacteria: this.dataset.bacteria,
                 condition: this.dataset.condition,
                 count: parseInt(this.dataset.count, 10),
                 effect: this.dataset.effect,
-                pmids: pmidsStr ? pmidsStr.split(',') : []
+                pmids: pmidsStr ? pmidsStr.split(',') : [],
+                age_ranges: ageRangesStr ? ageRangesStr.split(',').filter(Boolean) : []
             });
         });
     });
@@ -486,6 +551,10 @@ function updateChart() {
     const chartType = document.getElementById('chart-type').value;
     const conditionFilter = document.getElementById('condition-filter').value;
     const bacteriaFilter = document.getElementById('bacteria-filter').value;
+    const ageFilter = document.getElementById('age-filter').value;
+
+    // Update age filter status indicator
+    updateAgeFilterStatus(ageFilter);
 
     // Restore canvas if switching from heatmap to chart view
     if (chartType !== 'heatmap') {
@@ -494,13 +563,13 @@ function updateChart() {
 
     switch (chartType) {
         case 'bubble':
-            createBubbleChart(bacteriaConditionsData, conditionFilter, bacteriaFilter);
+            createBubbleChart(bacteriaConditionsData, conditionFilter, bacteriaFilter, ageFilter);
             break;
         case 'bar':
-            createBarChart(bacteriaConditionsData, conditionFilter, bacteriaFilter);
+            createBarChart(bacteriaConditionsData, conditionFilter, bacteriaFilter, ageFilter);
             break;
         case 'heatmap':
-            createHeatmap(bacteriaConditionsData, conditionFilter, bacteriaFilter);
+            createHeatmap(bacteriaConditionsData, conditionFilter, bacteriaFilter, ageFilter);
             break;
     }
 }
@@ -571,6 +640,17 @@ function showAssociationDetails(point) {
         });
         contentDiv.appendChild(refsP);
     }
+
+    // Age groups studied
+    const ageP = document.createElement('p');
+    if (point.age_ranges && point.age_ranges.length > 0) {
+        ageP.innerHTML = '<strong>Age Groups Studied:</strong> ';
+        ageP.appendChild(document.createTextNode(point.age_ranges.join(', ')));
+    } else {
+        ageP.innerHTML = '<em>Age group data not available for these studies</em>';
+        ageP.style.color = 'var(--text-muted)';
+    }
+    contentDiv.appendChild(ageP);
 }
 
 // ===== Species Cards =====
@@ -735,6 +815,7 @@ function setupEventListeners() {
     document.getElementById('condition-filter').addEventListener('change', updateChart);
     document.getElementById('bacteria-filter').addEventListener('change', updateChart);
     document.getElementById('chart-type').addEventListener('change', updateChart);
+    document.getElementById('age-filter').addEventListener('change', updateChart);
 }
 
 // ===== Initialization =====

@@ -37,6 +37,23 @@
                     Data aggregated from peer-reviewed studies in the gut-brain axis literature.
                 </p>
 
+                <div class="data-terms-box">
+                    <h4>Understanding the Data</h4>
+                    <div class="data-terms-grid">
+                        <div class="data-term">
+                            <h5>Number of Studies</h5>
+                            <p>The count of peer-reviewed research studies that have documented this bacteria-condition association. Higher numbers indicate more research support.</p>
+                            <p class="term-note">In bubble charts, larger bubbles = more studies</p>
+                        </div>
+                        <div class="data-term">
+                            <h5>Effect Type</h5>
+                            <p><strong style="color: var(--beneficial);">Depleted (green):</strong> Bacteria found at lower levels in people with the condition - often protective species.<br>
+                            <strong style="color: var(--enriched);">Enriched (red):</strong> Bacteria found at higher levels in people with the condition.<br>
+                            <strong style="color: var(--varied);">Mixed (purple):</strong> Results vary across studies.</p>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="explorer-controls">
                     <div class="control-group">
                         <label for="condition-filter">Filter by Condition:</label>
@@ -58,6 +75,21 @@
                             <option value="heatmap">Heatmap</option>
                         </select>
                     </div>
+                    <div class="control-group">
+                        <label for="age-filter">Highlight by Age Group:</label>
+                        <select id="age-filter" class="filter-select">
+                            <option value="all">All Ages</option>
+                            <option value="Infant 0-2">Infant (0-2 years)</option>
+                            <option value="Child 3-12">Child (3-12 years)</option>
+                            <option value="Adolescent 13-17">Adolescent (13-17 years)</option>
+                            <option value="Adult 18-64">Adult (18-64 years)</option>
+                            <option value="Elderly 65+">Elderly (65+ years)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div id="age-filter-status" class="age-filter-status hidden">
+                    Highlighting studies for: <strong id="age-filter-label"></strong>
                 </div>
 
                 <p class="interaction-hint">Click on any data point to see details and references</p>
@@ -69,23 +101,20 @@
                 <div class="chart-legend">
                     <div class="legend-item">
                         <span class="legend-dot beneficial"></span>
-                        <span>Lower in condition (depleted)</span>
+                        <span>Depleted in condition</span>
+                        <span class="legend-tooltip">This bacteria is typically found at lower levels in people with this condition. Often these are protective or beneficial species that become depleted.</span>
                     </div>
                     <div class="legend-item">
                         <span class="legend-dot enriched"></span>
-                        <span>Higher in condition (enriched)</span>
+                        <span>Enriched in condition</span>
+                        <span class="legend-tooltip">This bacteria is typically found at higher levels in people with this condition. May indicate dysbiosis or an imbalanced microbiome.</span>
                     </div>
                     <div class="legend-item">
                         <span class="legend-dot varied"></span>
-                        <span>Mixed results across studies</span>
+                        <span>Mixed results</span>
+                        <span class="legend-tooltip">Research shows inconsistent results - some studies find higher levels, others find lower. Effects may depend on specific strains, diet, or other factors.</span>
                     </div>
                 </div>
-
-                <p class="legend-explanation">
-                    <strong>How to read this:</strong> Green means the bacteria is typically found at <em>lower levels</em>
-                    in people with the condition (potentially protective). Red means the bacteria is found at
-                    <em>higher levels</em> in people with the condition. Bubble size indicates number of studies.
-                </p>
 
                 <div id="association-details" class="association-details hidden">
                     <h3>Association Details</h3>

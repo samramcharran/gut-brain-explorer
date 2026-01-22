@@ -14,12 +14,35 @@ import json
 import logging
 import os
 import re
+import ssl
 import sys
+import time
 import urllib.request
 import urllib.parse
 from datetime import datetime
 from collections import defaultdict
 import xml.etree.ElementTree as ET
+
+# Try to use certifi for SSL certificates (fixes macOS issues)
+try:
+    import certifi
+    SSL_CONTEXT = ssl.create_default_context(cafile=certifi.where())
+except ImportError:
+    SSL_CONTEXT = None
+
+# MeSH Age Term to Standardized Age Group Mapping
+MESH_AGE_MAP = {
+    'Infant': 'Infant 0-2',
+    'Infant, Newborn': 'Infant 0-2',
+    'Child': 'Child 3-12',
+    'Child, Preschool': 'Child 3-12',
+    'Adolescent': 'Adolescent 13-17',
+    'Young Adult': 'Adult 18-64',
+    'Adult': 'Adult 18-64',
+    'Middle Aged': 'Adult 18-64',
+    'Aged': 'Elderly 65+',
+    'Aged, 80 and over': 'Elderly 65+',
+}
 
 # Configure logging
 logging.basicConfig(
@@ -60,7 +83,7 @@ def fetch_pubmed_gut_brain_data():
     search_url = f"https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term={encoded_term}&retmax=100&sort=date&retmode=json"
 
     try:
-        with urllib.request.urlopen(search_url, timeout=30) as response:
+        with urllib.request.urlopen(search_url, timeout=30, context=SSL_CONTEXT) as response:
             search_data = json.loads(response.read().decode())
 
         id_list = search_data.get('esearchresult', {}).get('idlist', [])
@@ -73,7 +96,7 @@ def fetch_pubmed_gut_brain_data():
         ids = ','.join(id_list[:50])  # Limit to 50
         summary_url = f"https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi?db=pubmed&id={ids}&retmode=json"
 
-        with urllib.request.urlopen(summary_url, timeout=30) as response:
+        with urllib.request.urlopen(summary_url, timeout=30, context=SSL_CONTEXT) as response:
             summary_data = json.loads(response.read().decode())
 
         papers = []
@@ -93,6 +116,83 @@ def fetch_pubmed_gut_brain_data():
     except Exception as e:
         print(f"  Warning: Could not fetch PubMed data: {e}")
         return []
+
+
+def fetch_age_metadata_for_pmids(pmid_list):
+    """
+    Fetch age-related MeSH terms from PubMed efetch API.
+
+    Args:
+        pmid_list: List of PMID strings
+
+    Returns:
+        dict: {pmid: ['Adult 18-64', 'Elderly 65+'], ...} or empty list if no age data
+    """
+    if not pmid_list:
+        return {}
+
+    print(f"Fetching age metadata for {len(pmid_list)} PMIDs...")
+    age_metadata = {}
+
+    # Process in batches of 200 (NCBI limit)
+    batch_size = 200
+    for i in range(0, len(pmid_list), batch_size):
+        batch = pmid_list[i:i + batch_size]
+        ids = ','.join(batch)
+
+        efetch_url = f"https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id={ids}&retmode=xml"
+
+        try:
+            with urllib.request.urlopen(efetch_url, timeout=30, context=SSL_CONTEXT) as response:
+                xml_data = response.read().decode('utf-8')
+
+            # Parse XML
+            root = ET.fromstring(xml_data)
+
+            # Find all PubmedArticle elements
+            for article in root.findall('.//PubmedArticle'):
+                # Get PMID
+                pmid_elem = article.find('.//PMID')
+                if pmid_elem is None or not pmid_elem.text:
+                    continue
+                pmid = pmid_elem.text
+
+                # Find MeSH headings with age-related terms
+                age_groups = set()
+
+                # Check MeshHeadingList for age qualifiers
+                for mesh_heading in article.findall('.//MeshHeading'):
+                    descriptor = mesh_heading.find('DescriptorName')
+                    if descriptor is not None and descriptor.text:
+                        term = descriptor.text
+                        if term in MESH_AGE_MAP:
+                            age_groups.add(MESH_AGE_MAP[term])
+
+                    # Also check QualifierName elements
+                    for qualifier in mesh_heading.findall('QualifierName'):
+                        if qualifier.text:
+                            term = qualifier.text
+                            if term in MESH_AGE_MAP:
+                                age_groups.add(MESH_AGE_MAP[term])
+
+                age_metadata[pmid] = sorted(list(age_groups))
+
+            # Rate limit: NCBI requests max 3/sec without API key
+            if i + batch_size < len(pmid_list):
+                time.sleep(0.35)
+
+        except (urllib.error.URLError, ET.ParseError) as e:
+            print(f"  Warning: Could not fetch age metadata for batch: {e}")
+            # Continue with empty data for this batch
+            for pmid in batch:
+                if pmid not in age_metadata:
+                    age_metadata[pmid] = []
+
+    # Count how many PMIDs have age data
+    with_age = sum(1 for v in age_metadata.values() if v)
+    print(f"  Found age metadata for {with_age}/{len(pmid_list)} PMIDs")
+
+    return age_metadata
 
 
 def fetch_bugsigdb_data():
@@ -430,6 +530,7 @@ def process_bacteria_conditions(bugsigdb_data):
     """
     Process raw data into a format suitable for Chart.js visualization.
     Creates a matrix of bacteria x conditions with study counts.
+    Enriches with age metadata from PubMed MeSH terms.
     """
     print("Processing bacteria-condition matrix...")
 
@@ -443,6 +544,15 @@ def process_bacteria_conditions(bugsigdb_data):
         matrix[bacteria][condition]["count"] += assoc["study_count"]
         matrix[bacteria][condition]["directions"].append(assoc["direction"])
         matrix[bacteria][condition]["pmids"].extend(assoc.get("pmids", []))
+
+    # Collect all unique PMIDs for age metadata fetch
+    all_pmids = set()
+    for assoc in bugsigdb_data:
+        all_pmids.update(assoc.get("pmids", []))
+    all_pmids = list(all_pmids)
+
+    # Fetch age metadata from PubMed
+    age_metadata = fetch_age_metadata_for_pmids(all_pmids)
 
     # Convert to list format for JSON
     bacteria_list = sorted(set(a["bacteria"].split()[0] for a in bugsigdb_data))
@@ -476,12 +586,21 @@ def process_bacteria_conditions(bugsigdb_data):
                 else:
                     effect = "varied"
 
+                # Aggregate age ranges from all PMIDs for this association
+                pmids_for_assoc = list(set(data["pmids"]))[:3]
+                age_ranges = set()
+                for pmid in pmids_for_assoc:
+                    if pmid in age_metadata and age_metadata[pmid]:
+                        age_ranges.update(age_metadata[pmid])
+                age_ranges = sorted(list(age_ranges))
+
                 chart_data["associations"].append({
                     "bacteria": bacteria,
                     "condition": condition,
                     "study_count": data["count"],
                     "effect": effect,
-                    "pmids": list(set(data["pmids"]))[:3]  # Top 3 PMIDs
+                    "pmids": pmids_for_assoc,
+                    "age_ranges": age_ranges
                 })
 
     print(f"  Processed {len(chart_data['associations'])} associations")

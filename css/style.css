@@ -903,3 +903,219 @@ body {
 .species-card:nth-child(6), .diet-card:nth-child(6) { animation-delay: 0.6s; }
 .species-card:nth-child(7), .diet-card:nth-child(7) { animation-delay: 0.7s; }
 .species-card:nth-child(8), .diet-card:nth-child(8) { animation-delay: 0.8s; }
+
+/* ===== Data Terms Info Box ===== */
+.data-terms-box {
+    background: linear-gradient(135deg, rgba(45, 106, 79, 0.05), rgba(67, 97, 238, 0.05));
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-lg);
+    padding: var(--space-lg);
+    margin-bottom: var(--space-xl);
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.data-terms-box h4 {
+    font-family: var(--font-display);
+    color: var(--primary-dark);
+    font-size: 1.1rem;
+    margin-bottom: var(--space-md);
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+}
+
+.data-terms-box h4::before {
+    content: "\2139";
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    background: var(--primary);
+    color: white;
+    border-radius: 50%;
+    font-size: 0.85rem;
+    font-family: var(--font-main);
+}
+
+.data-terms-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--space-lg);
+}
+
+.data-term {
+    background: white;
+    padding: var(--space-md);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+}
+
+.data-term h5 {
+    color: var(--primary);
+    font-size: 0.95rem;
+    margin-bottom: var(--space-sm);
+    font-weight: 600;
+}
+
+.data-term p {
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+    line-height: 1.5;
+    margin: 0;
+}
+
+.data-term .term-note {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-top: var(--space-sm);
+    font-style: italic;
+}
+
+/* ===== Legend Tooltips ===== */
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    position: relative;
+    cursor: help;
+}
+
+.legend-item .legend-tooltip {
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--text-primary);
+    color: white;
+    padding: var(--space-sm) var(--space-md);
+    border-radius: var(--radius-md);
+    font-size: 0.8rem;
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s, visibility 0.2s;
+    z-index: 100;
+    max-width: 280px;
+    white-space: normal;
+    text-align: center;
+    line-height: 1.4;
+    box-shadow: var(--shadow-md);
+}
+
+.legend-item .legend-tooltip::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 6px solid transparent;
+    border-top-color: var(--text-primary);
+}
+
+.legend-item:hover .legend-tooltip {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Heatmap legend tooltips */
+.heatmap-legend-item {
+    position: relative;
+    cursor: help;
+}
+
+.heatmap-legend-item .legend-tooltip {
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--text-primary);
+    color: white;
+    padding: var(--space-sm) var(--space-md);
+    border-radius: var(--radius-md);
+    font-size: 0.8rem;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s, visibility 0.2s;
+    z-index: 100;
+    max-width: 280px;
+    white-space: normal;
+    text-align: center;
+    line-height: 1.4;
+    box-shadow: var(--shadow-md);
+}
+
+.heatmap-legend-item .legend-tooltip::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 6px solid transparent;
+    border-top-color: var(--text-primary);
+}
+
+.heatmap-legend-item:hover .legend-tooltip {
+    opacity: 1;
+    visibility: visible;
+}
+
+@media (max-width: 768px) {
+    .data-terms-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .legend-item .legend-tooltip,
+    .heatmap-legend-item .legend-tooltip {
+        left: 0;
+        transform: translateX(0);
+        max-width: 220px;
+    }
+
+    .legend-item .legend-tooltip::after,
+    .heatmap-legend-item .legend-tooltip::after {
+        left: 20px;
+        transform: none;
+    }
+}
+
+/* ===== Age Filter Highlighting ===== */
+.age-filter-status {
+    background: rgba(247, 127, 0, 0.1);
+    border: 1px solid var(--accent);
+    padding: var(--space-sm) var(--space-md);
+    border-radius: var(--radius-md);
+    font-size: 0.9rem;
+    text-align: center;
+    margin-bottom: var(--space-md);
+    color: var(--text-primary);
+}
+
+.age-filter-status strong {
+    color: var(--accent);
+}
+
+/* Heatmap cell highlighting for age filter */
+.heatmap-cell.age-highlighted {
+    box-shadow: inset 0 0 0 2px #f77f00;
+    position: relative;
+}
+
+.heatmap-cell.age-highlighted::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    box-shadow: 0 0 8px rgba(247, 127, 0, 0.4);
+    pointer-events: none;
+}
+
+@media (max-width: 768px) {
+    .age-filter-status {
+        font-size: 0.85rem;
+        padding: var(--space-xs) var(--space-sm);
+    }
+}

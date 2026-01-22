@@ -32,7 +32,8 @@
       "effect": "enriched",
       "pmids": [
         "32321934"
-      ]
+      ],
+      "age_ranges": []
     },
     {
       "bacteria": "Akkermansia",
@@ -41,6 +42,10 @@
       "effect": "enriched",
       "pmids": [
         "28449715"
+      ],
+      "age_ranges": [
+        "Adult 18-64",
+        "Elderly 65+"
       ]
     },
     {
@@ -50,7 +55,8 @@
       "effect": "depleted",
       "pmids": [
         "33067419"
-      ]
+      ],
+      "age_ranges": []
     },
     {
       "bacteria": "Bacteroides",
@@ -59,7 +65,8 @@
       "effect": "enriched",
       "pmids": [
         "29396424"
-      ]
+      ],
+      "age_ranges": []
     },
     {
       "bacteria": "Bacteroides",
@@ -68,7 +75,8 @@
       "effect": "varied",
       "pmids": [
         "31040953"
-      ]
+      ],
+      "age_ranges": []
     },
     {
       "bacteria": "Bifidobacterium",
@@ -77,7 +85,8 @@
       "effect": "depleted",
       "pmids": [
         "29396424"
-      ]
+      ],
+      "age_ranges": []
     },
     {
       "bacteria": "Bifidobacterium",
@@ -87,7 +96,8 @@
       "pmids": [
         "31040953",
         "30066368"
-      ]
+      ],
+      "age_ranges": []
     },
     {
       "bacteria": "Bifidobacterium",
@@ -96,7 +106,8 @@
       "effect": "depleted",
       "pmids": [
         "30356867"
-      ]
+      ],
+      "age_ranges": []
     },
     {
       "bacteria": "Bifidobacterium",
@@ -105,7 +116,8 @@
       "effect": "enriched",
       "pmids": [
         "30114969"
-      ]
+      ],
+      "age_ranges": []
     },
     {
       "bacteria": "Bifidobacterium",
@@ -113,8 +125,11 @@
       "study_count": 15,
       "effect": "depleted",
       "pmids": [
-        "27288567",
-        "30066368"
+        "30066368",
+        "27288567"
+      ],
+      "age_ranges": [
+        "Adult 18-64"
       ]
     },
     {
@@ -124,6 +139,9 @@
       "effect": "depleted",
       "pmids": [
         "28483500"
+      ],
+      "age_ranges": [
+        "Adult 18-64"
       ]
     },
     {
@@ -132,8 +150,13 @@
       "study_count": 10,
       "effect": "enriched",
       "pmids": [
-        "28122648",
-        "30356867"
+        "30356867",
+        "28122648"
+      ],
+      "age_ranges": [
+        "Adolescent 13-17",
+        "Child 3-12",
+        "Infant 0-2"
       ]
     },
     {
@@ -143,6 +166,9 @@
       "effect": "depleted",
       "pmids": [
         "30718848"
+      ],
+      "age_ranges": [
+        "Adult 18-64"
       ]
     },
     {
@@ -152,6 +178,11 @@
       "effect": "enriched",
       "pmids": [
         "28122648"
+      ],
+      "age_ranges": [
+        "Adolescent 13-17",
+        "Child 3-12",
+        "Infant 0-2"
       ]
     },
     {
@@ -161,6 +192,9 @@
       "effect": "depleted",
       "pmids": [
         "30718848"
+      ],
+      "age_ranges": [
+        "Adult 18-64"
       ]
     },
     {
@@ -170,7 +204,8 @@
       "effect": "enriched",
       "pmids": [
         "38065935"
-      ]
+      ],
+      "age_ranges": []
     },
     {
       "bacteria": "Escherichia",
@@ -179,7 +214,8 @@
       "effect": "enriched",
       "pmids": [
         "30066368"
-      ]
+      ],
+      "age_ranges": []
     },
     {
       "bacteria": "Faecalibacterium",
@@ -188,7 +224,8 @@
       "effect": "depleted",
       "pmids": [
         "38065935"
-      ]
+      ],
+      "age_ranges": []
     },
     {
       "bacteria": "Faecalibacterium",
@@ -197,6 +234,9 @@
       "effect": "depleted",
       "pmids": [
         "30075731"
+      ],
+      "age_ranges": [
+        "Elderly 65+"
       ]
     },
     {
@@ -206,7 +246,8 @@
       "effect": "enriched",
       "pmids": [
         "33067419"
-      ]
+      ],
+      "age_ranges": []
     },
     {
       "bacteria": "Lactobacillus",
@@ -216,7 +257,8 @@
       "pmids": [
         "32321934",
         "29396424"
-      ]
+      ],
+      "age_ranges": []
     },
     {
       "bacteria": "Lactobacillus",
@@ -226,7 +268,8 @@
       "pmids": [
         "31040953",
         "30066368"
-      ]
+      ],
+      "age_ranges": []
     },
     {
       "bacteria": "Lactobacillus",
@@ -235,7 +278,8 @@
       "effect": "depleted",
       "pmids": [
         "30356867"
-      ]
+      ],
+      "age_ranges": []
     },
     {
       "bacteria": "Lactobacillus",
@@ -245,7 +289,8 @@
       "pmids": [
         "31164598",
         "30114969"
-      ]
+      ],
+      "age_ranges": []
     },
     {
       "bacteria": "Lactobacillus",
@@ -253,8 +298,11 @@
       "study_count": 12,
       "effect": "depleted",
       "pmids": [
-        "27288567",
-        "30066368"
+        "30066368",
+        "27288567"
+      ],
+      "age_ranges": [
+        "Adult 18-64"
       ]
     },
     {
@@ -264,6 +312,10 @@
       "effect": "enriched",
       "pmids": [
         "28449715"
+      ],
+      "age_ranges": [
+        "Adult 18-64",
+        "Elderly 65+"
       ]
     },
     {
@@ -272,8 +324,11 @@
       "study_count": 7,
       "effect": "depleted",
       "pmids": [
-        "21876150",
-        "28483500"
+        "28483500",
+        "21876150"
+      ],
+      "age_ranges": [
+        "Adult 18-64"
       ]
     },
     {
@@ -283,7 +338,8 @@
       "effect": "depleted",
       "pmids": [
         "33067419"
-      ]
+      ],
+      "age_ranges": []
     },
     {
       "bacteria": "Prevotella",
@@ -292,6 +348,11 @@
       "effect": "depleted",
       "pmids": [
         "28122648"
+      ],
+      "age_ranges": [
+        "Adolescent 13-17",
+        "Child 3-12",
+        "Infant 0-2"
       ]
     },
     {
@@ -302,6 +363,10 @@
       "pmids": [
         "28449715",
         "30075731"
+      ],
+      "age_ranges": [
+        "Adult 18-64",
+        "Elderly 65+"
       ]
     },
     {
@@ -311,7 +376,8 @@
       "effect": "enriched",
       "pmids": [
         "32321934"
-      ]
+      ],
+      "age_ranges": []
     },
     {
       "bacteria": "Roseburia",
@@ -320,6 +386,9 @@
       "effect": "depleted",
       "pmids": [
         "30075731"
+      ],
+      "age_ranges": [
+        "Elderly 65+"
       ]
     }
   ]
