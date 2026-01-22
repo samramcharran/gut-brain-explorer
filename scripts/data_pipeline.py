@@ -11,13 +11,22 @@ Outputs clean JSON files for the frontend dashboard.
 """
 
 import json
+import logging
 import os
 import re
+import sys
 import urllib.request
 import urllib.parse
 from datetime import datetime
 from collections import defaultdict
 import xml.etree.ElementTree as ET
+
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s',
+    datefmt='%Y-%m-%d %H:%M:%S'
+)
 
 # Output directory
 DATA_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'data')
@@ -116,16 +125,16 @@ def fetch_bugsigdb_data():
         {"bacteria": "Prevotella", "condition": "Anxiety", "direction": "decreased", "study_count": 4, "pmids": ["33067419"]},
         {"bacteria": "Escherichia", "condition": "Anxiety", "direction": "increased", "study_count": 5, "pmids": ["30066368"]},
 
-        # Stress associations
-        {"bacteria": "Lactobacillus rhamnosus", "condition": "Stress", "direction": "beneficial", "study_count": 7, "pmids": ["21876150", "28483500"]},
-        {"bacteria": "Bifidobacterium longum", "condition": "Stress", "direction": "beneficial", "study_count": 6, "pmids": ["28483500"]},
+        # Stress associations (decreased = protective bacteria are lower under stress)
+        {"bacteria": "Lactobacillus rhamnosus", "condition": "Stress", "direction": "decreased", "study_count": 7, "pmids": ["21876150", "28483500"]},
+        {"bacteria": "Bifidobacterium longum", "condition": "Stress", "direction": "decreased", "study_count": 6, "pmids": ["28483500"]},
         {"bacteria": "Akkermansia", "condition": "Stress", "direction": "decreased", "study_count": 3, "pmids": ["33067419"]},
 
-        # Cognitive function associations
-        {"bacteria": "Akkermansia muciniphila", "condition": "Cognitive Function", "direction": "beneficial", "study_count": 5, "pmids": ["32355309"]},
-        {"bacteria": "Lactobacillus", "condition": "Cognitive Function", "direction": "beneficial", "study_count": 8, "pmids": ["30114969", "31164598"]},
-        {"bacteria": "Bifidobacterium", "condition": "Cognitive Function", "direction": "beneficial", "study_count": 7, "pmids": ["30114969"]},
-        {"bacteria": "Roseburia", "condition": "Cognitive Function", "direction": "beneficial", "study_count": 3, "pmids": ["32355309"]},
+        # Cognitive function associations (increased = higher levels associated with better cognition)
+        {"bacteria": "Akkermansia muciniphila", "condition": "Cognitive Function", "direction": "increased", "study_count": 5, "pmids": ["32355309"]},
+        {"bacteria": "Lactobacillus", "condition": "Cognitive Function", "direction": "increased", "study_count": 8, "pmids": ["30114969", "31164598"]},
+        {"bacteria": "Bifidobacterium", "condition": "Cognitive Function", "direction": "increased", "study_count": 7, "pmids": ["30114969"]},
+        {"bacteria": "Roseburia", "condition": "Cognitive Function", "direction": "increased", "study_count": 3, "pmids": ["32355309"]},
 
         # Autism Spectrum associations
         {"bacteria": "Clostridium", "condition": "Autism Spectrum", "direction": "increased", "study_count": 10, "pmids": ["28122648", "30356867"]},
@@ -171,10 +180,11 @@ def curate_diet_microbiome_data():
         {
             "diet_factor": "Fermented foods",
             "description": "Yogurt, kefir, kimchi, sauerkraut, kombucha",
-            "bacteria_increased": ["Lactobacillus", "Bifidobacterium", "Streptococcus thermophilus"],
+            "bacteria_increased": ["Lactobacillus", "Bifidobacterium", "Streptococcus thermophilus*"],
             "bacteria_decreased": [],
             "mechanism": "Direct introduction of beneficial bacteria and metabolites",
             "mental_health_impact": "Positive - Reduces stress hormones, improves mood",
+            "note": "*S. thermophilus is transient (dietary) and does not permanently colonize the gut, but provides benefits during transit",
             "references": ["PMID: 27998788", "PMID: 33147158"]
         },
         {
@@ -364,6 +374,51 @@ def create_gut_brain_species_data():
             "food_sources": ["Supported by high-fiber diet"],
             "research_strength": "Emerging",
             "pmid": "30911743"
+        },
+        {
+            "name": "Prevotella copri",
+            "genus": "Prevotella",
+            "nickname": "The Diversity Marker",
+            "description": "A key indicator of gut microbiome diversity, strongly associated with plant-rich diets. Consistently depleted in Parkinson's disease and autism spectrum conditions.",
+            "key_findings": [
+                "Strongly associated with Mediterranean diet adherence",
+                "Significantly reduced in Parkinson's disease patients",
+                "Depleted in autism spectrum disorder"
+            ],
+            "mental_health_associations": ["Parkinson's Disease", "Autism Spectrum", "Anxiety"],
+            "food_sources": ["Plant-based diet", "High-fiber foods", "Whole grains"],
+            "research_strength": "Strong",
+            "pmid": "28662719"
+        },
+        {
+            "name": "Clostridium species",
+            "genus": "Clostridium",
+            "nickname": "The Complex One",
+            "description": "A diverse genus with both beneficial and potentially harmful members. Certain Clostridium species are consistently elevated in autism spectrum disorder and may influence neurodevelopment through toxin production.",
+            "key_findings": [
+                "Elevated in autism spectrum disorder across multiple studies",
+                "Some species produce neurotoxic metabolites",
+                "Reduced by high-fiber diets and fermented foods"
+            ],
+            "mental_health_associations": ["Autism Spectrum", "Neurodevelopment"],
+            "food_sources": ["Decreased by fiber-rich and fermented foods"],
+            "research_strength": "Strong",
+            "pmid": "28122648"
+        },
+        {
+            "name": "Desulfovibrio species",
+            "genus": "Desulfovibrio",
+            "nickname": "The Sulfur Reducer",
+            "description": "Sulfate-reducing bacteria increasingly linked to autism spectrum disorder. May contribute to gut inflammation through hydrogen sulfide production.",
+            "key_findings": [
+                "Elevated in children with autism spectrum disorder",
+                "Produces hydrogen sulfide which can affect gut barrier",
+                "May contribute to GI symptoms common in ASD"
+            ],
+            "mental_health_associations": ["Autism Spectrum"],
+            "food_sources": ["Reduced by polyphenol-rich foods"],
+            "research_strength": "Emerging",
+            "pmid": "28122648"
         }
     ]
 
@@ -406,12 +461,18 @@ def process_bacteria_conditions(bugsigdb_data):
                 data = matrix[bacteria][condition]
                 # Determine predominant direction
                 directions = data["directions"]
-                if "beneficial" in directions or "decreased" in directions:
-                    effect = "beneficial" if condition in ["Stress", "Cognitive Function"] else (
-                        "depleted" if directions.count("decreased") > directions.count("increased") else "enriched"
-                    )
-                elif "increased" in directions:
+                decreased_count = directions.count("decreased")
+                increased_count = directions.count("increased")
+                varied_count = directions.count("varied")
+
+                if varied_count > 0 and varied_count >= decreased_count and varied_count >= increased_count:
+                    effect = "varied"
+                elif decreased_count > increased_count:
+                    effect = "depleted"
+                elif increased_count > decreased_count:
                     effect = "enriched"
+                elif decreased_count == increased_count and decreased_count > 0:
+                    effect = "varied"
                 else:
                     effect = "varied"
 
@@ -437,41 +498,61 @@ def save_json(data, filename):
 
 def main():
     """Main pipeline execution."""
-    print("=" * 60)
-    print("GutBrain Explorer Data Pipeline")
-    print("=" * 60)
-    print(f"Timestamp: {datetime.now().isoformat()}")
-    print()
+    logging.info("=" * 60)
+    logging.info("GutBrain Explorer Data Pipeline")
+    logging.info("=" * 60)
+    logging.info(f"Timestamp: {datetime.now().isoformat()}")
 
-    # Ensure data directory exists
-    os.makedirs(DATA_DIR, exist_ok=True)
+    try:
+        # Ensure data directory exists
+        os.makedirs(DATA_DIR, exist_ok=True)
+        logging.info(f"Output directory: {DATA_DIR}")
 
-    # 1. Fetch and process BugSigDB data
-    bugsigdb_data = fetch_bugsigdb_data()
+        # 1. Fetch and process BugSigDB data
+        logging.info("Step 1/5: Loading BugSigDB associations...")
+        bugsigdb_data = fetch_bugsigdb_data()
 
-    # 2. Process into chart-ready format
-    bacteria_conditions = process_bacteria_conditions(bugsigdb_data)
-    save_json(bacteria_conditions, 'bacteria_conditions.json')
+        # 2. Process into chart-ready format
+        logging.info("Step 2/5: Processing bacteria-condition matrix...")
+        bacteria_conditions = process_bacteria_conditions(bugsigdb_data)
+        save_json(bacteria_conditions, 'bacteria_conditions.json')
 
-    # 3. Create species profiles
-    species_data = create_gut_brain_species_data()
-    save_json(species_data, 'gut_brain_species.json')
+        # 3. Create species profiles
+        logging.info("Step 3/5: Creating species profiles...")
+        species_data = create_gut_brain_species_data()
+        save_json(species_data, 'gut_brain_species.json')
 
-    # 4. Load diet-microbiome associations
-    diet_data = curate_diet_microbiome_data()
-    save_json(diet_data, 'diet_microbiome.json')
+        # 4. Load diet-microbiome associations
+        logging.info("Step 4/5: Loading diet-microbiome data...")
+        diet_data = curate_diet_microbiome_data()
+        save_json(diet_data, 'diet_microbiome.json')
 
-    # 5. Fetch PubMed data for context
-    pubmed_data = fetch_pubmed_gut_brain_data()
-    if pubmed_data:
-        save_json(pubmed_data, 'recent_papers.json')
+        # 5. Fetch PubMed data for context
+        logging.info("Step 5/5: Fetching PubMed data...")
+        pubmed_data = fetch_pubmed_gut_brain_data()
+        if pubmed_data:
+            save_json(pubmed_data, 'recent_papers.json')
+        else:
+            logging.warning("No PubMed data fetched - continuing without recent papers")
 
-    print()
-    print("=" * 60)
-    print("Pipeline complete!")
-    print(f"Output directory: {DATA_DIR}")
-    print("=" * 60)
+        logging.info("=" * 60)
+        logging.info("Pipeline complete!")
+        logging.info("=" * 60)
+        return 0
+
+    except FileNotFoundError as e:
+        logging.error(f"File not found: {e}")
+        return 1
+    except json.JSONDecodeError as e:
+        logging.error(f"JSON parsing error: {e}")
+        return 1
+    except urllib.error.URLError as e:
+        logging.error(f"Network error: {e}")
+        return 1
+    except Exception as e:
+        logging.error(f"Unexpected error: {e}")
+        return 1
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())

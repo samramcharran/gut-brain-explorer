@@ -25,11 +25,12 @@
     "bacteria_increased": [
       "Lactobacillus",
       "Bifidobacterium",
-      "Streptococcus thermophilus"
+      "Streptococcus thermophilus*"
     ],
     "bacteria_decreased": [],
     "mechanism": "Direct introduction of beneficial bacteria and metabolites",
     "mental_health_impact": "Positive - Reduces stress hormones, improves mood",
+    "note": "*S. thermophilus is transient (dietary) and does not permanently colonize the gut, but provides benefits during transit",
     "references": [
       "PMID: 27998788",
       "PMID: 33147158"

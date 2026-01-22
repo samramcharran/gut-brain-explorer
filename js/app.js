@@ -41,8 +41,30 @@ async function loadData() {
         return true;
     } catch (error) {
         console.error('Error loading data:', error);
+        showErrorState(error.message || 'Failed to load data');
         return false;
     }
+}
+
+// Error state handler with user feedback and retry option
+function showErrorState(message) {
+    const chartContainer = document.querySelector('.chart-container');
+    if (chartContainer) {
+        chartContainer.innerHTML = `
+            <div class="error-state">
+                <p class="error-message">Unable to load data: ${escapeHtml(message)}</p>
+                <p class="error-hint">Please ensure the data files exist in the data/ directory.</p>
+                <button class="retry-button" onclick="location.reload()">Retry</button>
+            </div>
+        `;
+    }
+}
+
+// HTML escape helper to prevent XSS
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
 }
 
 // ===== Filter Population =====
@@ -297,9 +319,50 @@ function createBarChart(data, conditionFilter = 'all', bacteriaFilter = 'all') {
                         text: 'Total Study Count'
                     }
                 }
+            },
+            onClick: function(event, elements) {
+                if (elements.length > 0) {
+                    const element = elements[0];
+                    const bacteriaName = labels[element.index];
+                    // Find all associations for this bacteria
+                    const bacteriaAssocs = filtered.filter(a => a.bacteria === bacteriaName);
+                    if (bacteriaAssocs.length > 0) {
+                        showBarChartDetails(bacteriaName, bacteriaAssocs, bacteriaCounts[bacteriaName]);
+                    }
+                }
             }
         }
     });
+}
+
+function showBarChartDetails(bacteria, associations, counts) {
+    const detailsDiv = document.getElementById('association-details');
+    const contentDiv = document.getElementById('details-content');
+
+    detailsDiv.classList.remove('hidden');
+
+    const totalStudies = counts.beneficial + counts.enriched + counts.varied;
+    const conditionsList = associations.map(a => a.condition).join(', ');
+
+    contentDiv.innerHTML = '';
+
+    const bacteriaP = document.createElement('p');
+    bacteriaP.innerHTML = '<strong>Bacteria:</strong> ';
+    bacteriaP.appendChild(document.createTextNode(bacteria));
+    contentDiv.appendChild(bacteriaP);
+
+    const totalP = document.createElement('p');
+    totalP.innerHTML = `<strong>Total Studies:</strong> ${totalStudies}`;
+    contentDiv.appendChild(totalP);
+
+    const breakdownP = document.createElement('p');
+    breakdownP.innerHTML = `<strong>Breakdown:</strong> ${counts.beneficial} beneficial/depleted, ${counts.enriched} enriched, ${counts.varied} varied`;
+    contentDiv.appendChild(breakdownP);
+
+    const conditionsP = document.createElement('p');
+    conditionsP.innerHTML = '<strong>Associated Conditions:</strong> ';
+    conditionsP.appendChild(document.createTextNode(conditionsList));
+    contentDiv.appendChild(conditionsP);
 }
 
 function createHeatmap(data, conditionFilter = 'all', bacteriaFilter = 'all') {
@@ -327,17 +390,40 @@ function createHeatmap(data, conditionFilter = 'all', bacteriaFilter = 'all') {
                     v: assoc.study_count,
                     effect: assoc.effect,
                     bacteria: b,
-                    condition: c
+                    condition: c,
+                    pmids: assoc.pmids
                 });
             }
         });
     });
 
+    // Calculate min/max for intensity scaling
+    const studyCounts = matrix.map(m => m.v);
+    const minCount = Math.min(...studyCounts);
+    const maxCount = Math.max(...studyCounts);
+
+    // Helper to calculate opacity based on study count (0.3 to 1.0 range)
+    function getIntensity(count) {
+        if (maxCount === minCount) return 0.7;
+        return 0.3 + (0.7 * (count - minCount) / (maxCount - minCount));
+    }
+
+    // Helper to apply intensity to a color
+    function applyIntensity(baseColor, intensity) {
+        // Parse rgba color and adjust alpha
+        const match = baseColor.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*([\d.]+))?\)/);
+        if (match) {
+            const r = match[1], g = match[2], b = match[3];
+            return `rgba(${r}, ${g}, ${b}, ${intensity})`;
+        }
+        return baseColor;
+    }
+
     // Use scatter chart with colored points to simulate heatmap
     const heatmapData = matrix.map(m => ({
         x: m.x,
         y: m.y,
-        r: 15,
+        r: 18,
         ...m
     }));
 
@@ -352,7 +438,8 @@ function createHeatmap(data, conditionFilter = 'all', bacteriaFilter = 'all') {
                 data: heatmapData,
                 backgroundColor: heatmapData.map(d => {
                     const colors = getEffectColor(d.effect);
-                    return colors.bg;
+                    const intensity = getIntensity(d.v);
+                    return applyIntensity(colors.bg, intensity);
                 }),
                 borderColor: heatmapData.map(d => {
                     const colors = getEffectColor(d.effect);
@@ -410,6 +497,20 @@ function createHeatmap(data, conditionFilter = 'all', bacteriaFilter = 'all') {
                         text: 'Condition'
                     }
                 }
+            },
+            onClick: function(event, elements) {
+                if (elements.length > 0) {
+                    const element = elements[0];
+                    const index = element.index;
+                    const point = heatmapData[index];
+                    showAssociationDetails({
+                        bacteria: point.bacteria,
+                        condition: point.condition,
+                        count: point.v,
+                        effect: point.effect,
+                        pmids: point.pmids
+                    });
+                }
             }
         }
     });
@@ -446,17 +547,59 @@ function showAssociationDetails(point) {
         'varied': 'Results vary across studies - effects may depend on strain or context.'
     };
 
-    contentDiv.innerHTML = `
-        <p><strong>Bacteria:</strong> ${point.bacteria}</p>
-        <p><strong>Condition:</strong> ${point.condition}</p>
-        <p><strong>Number of Studies:</strong> ${point.count}</p>
-        <p><strong>Effect:</strong> ${point.effect}</p>
-        <p>${effectDescription[point.effect] || ''}</p>
-        ${point.pmids && point.pmids.length > 0 ?
-            `<p><strong>Key References:</strong> ${point.pmids.map(id =>
-                `<a href="https://pubmed.ncbi.nlm.nih.gov/${id}" target="_blank">PMID: ${id}</a>`
-            ).join(', ')}</p>` : ''}
-    `;
+    // Clear content and build safely
+    contentDiv.innerHTML = '';
+
+    // Bacteria
+    const bacteriaP = document.createElement('p');
+    bacteriaP.innerHTML = '<strong>Bacteria:</strong> ';
+    bacteriaP.appendChild(document.createTextNode(point.bacteria));
+    contentDiv.appendChild(bacteriaP);
+
+    // Condition
+    const conditionP = document.createElement('p');
+    conditionP.innerHTML = '<strong>Condition:</strong> ';
+    conditionP.appendChild(document.createTextNode(point.condition));
+    contentDiv.appendChild(conditionP);
+
+    // Study count
+    const countP = document.createElement('p');
+    countP.innerHTML = `<strong>Number of Studies:</strong> ${parseInt(point.count, 10)}`;
+    contentDiv.appendChild(countP);
+
+    // Effect
+    const effectP = document.createElement('p');
+    effectP.innerHTML = '<strong>Effect:</strong> ';
+    effectP.appendChild(document.createTextNode(point.effect));
+    contentDiv.appendChild(effectP);
+
+    // Effect description
+    if (effectDescription[point.effect]) {
+        const descP = document.createElement('p');
+        descP.textContent = effectDescription[point.effect];
+        contentDiv.appendChild(descP);
+    }
+
+    // References (PMIDs are validated as numeric IDs)
+    if (point.pmids && point.pmids.length > 0) {
+        const refsP = document.createElement('p');
+        refsP.innerHTML = '<strong>Key References:</strong> ';
+        point.pmids.forEach((id, index) => {
+            // Validate PMID is numeric
+            const pmid = String(id).replace(/\D/g, '');
+            if (pmid) {
+                const link = document.createElement('a');
+                link.href = `https://pubmed.ncbi.nlm.nih.gov/${pmid}`;
+                link.target = '_blank';
+                link.textContent = `PMID: ${pmid}`;
+                if (index > 0) {
+                    refsP.appendChild(document.createTextNode(', '));
+                }
+                refsP.appendChild(link);
+            }
+        });
+        contentDiv.appendChild(refsP);
+    }
 }
 
 // ===== Species Cards =====
@@ -578,17 +721,18 @@ function renderDietCards() {
         card.className = `diet-card ${cardClass}`;
 
         card.innerHTML = `
-            <h3>${diet.diet_factor}</h3>
-            <p class="diet-description">${diet.description}</p>
+            <h3>${escapeHtml(diet.diet_factor)}</h3>
+            <p class="diet-description">${escapeHtml(diet.description)}</p>
             <div class="impact ${impactClass}">
                 <span class="impact-icon">${impactIcon}</span>
-                <span>${diet.mental_health_impact}</span>
+                <span>${escapeHtml(diet.mental_health_impact)}</span>
             </div>
-            <p class="mechanism"><strong>Mechanism:</strong> ${diet.mechanism}</p>
+            <p class="mechanism"><strong>Mechanism:</strong> ${escapeHtml(diet.mechanism)}</p>
             ${diet.bacteria_increased.length > 0 ?
-                `<p class="bacteria-list"><strong>Increases:</strong> ${diet.bacteria_increased.join(', ')}</p>` : ''}
+                `<p class="bacteria-list"><strong>Increases:</strong> ${diet.bacteria_increased.map(b => escapeHtml(b)).join(', ')}</p>` : ''}
             ${diet.bacteria_decreased.length > 0 ?
-                `<p class="bacteria-list"><strong>Decreases:</strong> ${diet.bacteria_decreased.join(', ')}</p>` : ''}
+                `<p class="bacteria-list"><strong>Decreases:</strong> ${diet.bacteria_decreased.map(b => escapeHtml(b)).join(', ')}</p>` : ''}
+            ${diet.note ? `<p class="diet-note"><em>${escapeHtml(diet.note)}</em></p>` : ''}
         `;
 
         container.appendChild(card);

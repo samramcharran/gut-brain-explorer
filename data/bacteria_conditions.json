@@ -29,7 +29,7 @@
       "bacteria": "Akkermansia",
       "condition": "Cognitive Function",
       "study_count": 5,
-      "effect": "beneficial",
+      "effect": "enriched",
       "pmids": [
         "32355309"
       ]
@@ -47,7 +47,7 @@
       "bacteria": "Akkermansia",
       "condition": "Stress",
       "study_count": 3,
-      "effect": "beneficial",
+      "effect": "depleted",
       "pmids": [
         "33067419"
       ]
@@ -102,7 +102,7 @@
       "bacteria": "Bifidobacterium",
       "condition": "Cognitive Function",
       "study_count": 7,
-      "effect": "beneficial",
+      "effect": "enriched",
       "pmids": [
         "30114969"
       ]
@@ -121,7 +121,7 @@
       "bacteria": "Bifidobacterium",
       "condition": "Stress",
       "study_count": 6,
-      "effect": "beneficial",
+      "effect": "depleted",
       "pmids": [
         "28483500"
       ]
@@ -214,8 +214,8 @@
       "study_count": 5,
       "effect": "varied",
       "pmids": [
-        "32355309",
-        "29396424"
+        "29396424",
+        "32355309"
       ]
     },
     {
@@ -241,10 +241,10 @@
       "bacteria": "Lactobacillus",
       "condition": "Cognitive Function",
       "study_count": 8,
-      "effect": "beneficial",
+      "effect": "enriched",
       "pmids": [
-        "31164598",
-        "30114969"
+        "30114969",
+        "31164598"
       ]
     },
     {
@@ -270,10 +270,10 @@
       "bacteria": "Lactobacillus",
       "condition": "Stress",
       "study_count": 7,
-      "effect": "beneficial",
+      "effect": "depleted",
       "pmids": [
-        "21876150",
-        "28483500"
+        "28483500",
+        "21876150"
       ]
     },
     {
@@ -300,15 +300,15 @@
       "study_count": 9,
       "effect": "depleted",
       "pmids": [
-        "28662719",
-        "30075731"
+        "30075731",
+        "28662719"
       ]
     },
     {
       "bacteria": "Roseburia",
       "condition": "Cognitive Function",
       "study_count": 3,
-      "effect": "beneficial",
+      "effect": "enriched",
       "pmids": [
         "32355309"
       ]

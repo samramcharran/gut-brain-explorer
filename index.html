@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GutBrain Explorer | Exploring the Gut-Brain Axis</title>
     <meta name="description" content="Interactive dashboard exploring the connection between gut bacteria and mental health conditions.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
@@ -57,7 +60,7 @@
                     </div>
                 </div>
 
-                <div class="chart-container">
+                <div class="chart-container" role="img" aria-label="Interactive chart showing bacteria-condition associations. Use the controls above to filter data and change chart type.">
                     <canvas id="main-chart"></canvas>
                 </div>
 
@@ -106,7 +109,7 @@
                     influence your microbiome and mental well-being.
                 </p>
 
-                <div class="diet-chart-container">
+                <div class="diet-chart-container" role="img" aria-label="Bar chart showing how different dietary factors affect gut bacteria populations.">
                     <canvas id="diet-chart"></canvas>
                 </div>
 
@@ -180,7 +183,7 @@
         <div class="container">
             <p>GutBrain Explorer | Data from public sources | Built with curiosity</p>
             <p class="footer-links">
-                <a href="https://github.com" target="_blank">View on GitHub</a>
+                <a href="https://github.com/samramcharran/gut-brain-explorer" target="_blank">View on GitHub</a>
             </p>
         </div>
     </footer>

@@ -171,5 +171,67 @@
     ],
     "research_strength": "Emerging",
     "pmid": "30911743"
+  },
+  {
+    "name": "Prevotella copri",
+    "genus": "Prevotella",
+    "nickname": "The Diversity Marker",
+    "description": "A key indicator of gut microbiome diversity, strongly associated with plant-rich diets. Consistently depleted in Parkinson's disease and autism spectrum conditions.",
+    "key_findings": [
+      "Strongly associated with Mediterranean diet adherence",
+      "Significantly reduced in Parkinson's disease patients",
+      "Depleted in autism spectrum disorder"
+    ],
+    "mental_health_associations": [
+      "Parkinson's Disease",
+      "Autism Spectrum",
+      "Anxiety"
+    ],
+    "food_sources": [
+      "Plant-based diet",
+      "High-fiber foods",
+      "Whole grains"
+    ],
+    "research_strength": "Strong",
+    "pmid": "28662719"
+  },
+  {
+    "name": "Clostridium species",
+    "genus": "Clostridium",
+    "nickname": "The Complex One",
+    "description": "A diverse genus with both beneficial and potentially harmful members. Certain Clostridium species are consistently elevated in autism spectrum disorder and may influence neurodevelopment through toxin production.",
+    "key_findings": [
+      "Elevated in autism spectrum disorder across multiple studies",
+      "Some species produce neurotoxic metabolites",
+      "Reduced by high-fiber diets and fermented foods"
+    ],
+    "mental_health_associations": [
+      "Autism Spectrum",
+      "Neurodevelopment"
+    ],
+    "food_sources": [
+      "Decreased by fiber-rich and fermented foods"
+    ],
+    "research_strength": "Strong",
+    "pmid": "28122648"
+  },
+  {
+    "name": "Desulfovibrio species",
+    "genus": "Desulfovibrio",
+    "nickname": "The Sulfur Reducer",
+    "description": "Sulfate-reducing bacteria increasingly linked to autism spectrum disorder. May contribute to gut inflammation through hydrogen sulfide production.",
+    "key_findings": [
+      "Elevated in children with autism spectrum disorder",
+      "Produces hydrogen sulfide which can affect gut barrier",
+      "May contribute to GI symptoms common in ASD"
+    ],
+    "mental_health_associations": [
+      "Autism Spectrum"
+    ],
+    "food_sources": [
+      "Reduced by polyphenol-rich foods"
+    ],
+    "research_strength": "Emerging",
+    "pmid": "28122648"
   }
 ]
