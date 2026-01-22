@@ -1,5 +1,35 @@
 [
   {
+    "pmid": "41565931",
+    "title": "Development of a novel humanized gut-brain axis model as a tool toward personalized nutrition.",
+    "pubdate": "2026 Jan 21",
+    "source": "Commun Biol"
+  },
+  {
+    "pmid": "41565637",
+    "title": "Critical appraisal of a pilot study examining a ketogenic diet as an adjunct therapy in college students with major depressive disorder.",
+    "pubdate": "2026 Jan 21",
+    "source": "Transl Psychiatry"
+  },
+  {
+    "pmid": "41564962",
+    "title": "Metabolomic insights into gut-brain axis dysregulation under unpredictable chronic stress in zebrafish.",
+    "pubdate": "2026 Jan 19",
+    "source": "Comp Biochem Physiol C Toxicol Pharmacol"
+  },
+  {
+    "pmid": "41564949",
+    "title": "Pathogenesis and potential therapies for perimenopausal depression: Insights from the estrogen-gut microbiota axis.",
+    "pubdate": "2026 Jan 19",
+    "source": "Front Neuroendocrinol"
+  },
+  {
+    "pmid": "41564867",
+    "title": "Microbiota-metabolome interplay in depression: Metabolic insights and diagnostic potential.",
+    "pubdate": "2026 Jan 20",
+    "source": "Cell Rep Med"
+  },
+  {
     "pmid": "41562934",
     "title": "Liver Fibrosis and the Risks of Impaired Cognition and Dementia: Mechanisms, Evidence, and Clinical Implications.",
     "pubdate": "2026 Jan 16",
@@ -268,35 +298,5 @@
     "title": "The Enterarchon: An ancient visceral brain.",
     "pubdate": "2026 Jan 14",
     "source": "Curr Opin Neurobiol"
-  },
-  {
-    "pmid": "41539110",
-    "title": "Gut virome plays an extended role with bacteriome in neurological health and disease.",
-    "pubdate": "2026 Jan 9",
-    "source": "J Neurol Sci"
-  },
-  {
-    "pmid": "41539105",
-    "title": "A novel gentiopicroside derivative clears phosphorylation tau to improve memory of AD mice by targeting AMPK and increase of gut neuroprotective metabolites.",
-    "pubdate": "2026 Jan 6",
-    "source": "Phytomedicine"
-  },
-  {
-    "pmid": "41537394",
-    "title": "Effect of Puerarin on Chronic Alcoholic Encephalopathy by Modulating the \"Microbiota-Gut-Brain Axis\" Lipopolysaccharides/Toll-Like Receptors 4/Nuclear Factor Kappa-B Inflammatory Pathway.",
-    "pubdate": "2026 Jan 15",
-    "source": "Phytother Res"
-  },
-  {
-    "pmid": "41537365",
-    "title": "Prompt engineering-enabled GenAI tools to map the landscape of crosstalk within the gut-brain axis (GBA) and its associated factors.",
-    "pubdate": "2026 Jan 13",
-    "source": "Int J Surg"
-  },
-  {
-    "pmid": "41535300",
-    "title": "A novel synbiotic (SCM06) for anxiety and sensory hyperresponsiveness in children with autism spectrum disorder: an open-label pilot study.",
-    "pubdate": "2026 Jan 14",
-    "source": "NPJ Biofilms Microbiomes"
   }
 ]

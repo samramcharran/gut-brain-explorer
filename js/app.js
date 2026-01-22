@@ -1,5 +1,5 @@
 /**
- * GutBrain Explorer - Interactive Dashboard
+ * Gut-Brain Explorer - Interactive Dashboard
  *
  * Visualizes gut-brain axis research data using Chart.js
  */
@@ -761,7 +761,7 @@ async function init() {
     createDietChart();
     renderDietCards();
 
-    console.log('GutBrain Explorer initialized successfully!');
+    console.log('Gut-Brain Explorer initialized successfully!');
 }
 
 // Start the app

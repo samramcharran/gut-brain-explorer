@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-GutBrain Explorer Data Pipeline
+Gut-Brain Explorer Data Pipeline
 
 Fetches and processes gut-brain axis research data from public sources:
 - BugSigDB: Curated microbiome-disease associations (CC0 license)
@@ -97,25 +97,25 @@ def fetch_pubmed_gut_brain_data():
 
 def fetch_bugsigdb_data():
     """
-    Fetch gut-brain related signatures from BugSigDB.
-    BugSigDB is a curated database of microbiome signatures (CC0 license).
+    Return manually curated gut-brain associations based on BugSigDB studies.
+
+    Note: This is a curated subset inspired by BugSigDB entries, not a live API fetch.
+    Each association is backed by peer-reviewed publications with PMIDs.
+
+    For production use, consider integrating with https://bugsigdb.org/api/
     """
-    print("Fetching BugSigDB gut-brain signatures...")
+    print("Loading curated gut-brain associations...")
 
-    # BugSigDB provides a bulk export - we'll use their API endpoint
-    # For simplicity, we'll use curated data based on their database
-    # In production, you'd fetch from: https://bugsigdb.org/api/
-
-    # Curated gut-brain associations from BugSigDB studies
-    # These are real associations documented in peer-reviewed studies
+    # Curated gut-brain associations based on BugSigDB studies
+    # Each association includes verified PubMed IDs for reference
     bugsigdb_associations = [
         # Depression associations
-        {"bacteria": "Lactobacillus", "condition": "Depression", "direction": "decreased", "study_count": 12, "pmids": ["31563266", "30066368"]},
-        {"bacteria": "Bifidobacterium", "condition": "Depression", "direction": "decreased", "study_count": 15, "pmids": ["31563266", "30066368"]},
-        {"bacteria": "Faecalibacterium", "condition": "Depression", "direction": "decreased", "study_count": 8, "pmids": ["30518628"]},
+        {"bacteria": "Lactobacillus", "condition": "Depression", "direction": "decreased", "study_count": 12, "pmids": ["27288567", "30066368"]},
+        {"bacteria": "Bifidobacterium", "condition": "Depression", "direction": "decreased", "study_count": 15, "pmids": ["27288567", "30066368"]},
+        {"bacteria": "Faecalibacterium", "condition": "Depression", "direction": "decreased", "study_count": 8, "pmids": ["38065935"]},
         {"bacteria": "Coprococcus", "condition": "Depression", "direction": "decreased", "study_count": 5, "pmids": ["30718848"]},
         {"bacteria": "Dialister", "condition": "Depression", "direction": "decreased", "study_count": 4, "pmids": ["30718848"]},
-        {"bacteria": "Eggerthella", "condition": "Depression", "direction": "increased", "study_count": 3, "pmids": ["31563266"]},
+        {"bacteria": "Eggerthella", "condition": "Depression", "direction": "increased", "study_count": 3, "pmids": ["38065935"]},
         {"bacteria": "Holdemania", "condition": "Depression", "direction": "increased", "study_count": 2, "pmids": ["33067419"]},
 
         # Anxiety associations
@@ -144,9 +144,9 @@ def fetch_bugsigdb_data():
         {"bacteria": "Prevotella", "condition": "Autism Spectrum", "direction": "decreased", "study_count": 8, "pmids": ["28122648"]},
 
         # Parkinson's Disease associations
-        {"bacteria": "Akkermansia", "condition": "Parkinson's Disease", "direction": "increased", "study_count": 6, "pmids": ["28662719"]},
-        {"bacteria": "Lactobacillus", "condition": "Parkinson's Disease", "direction": "increased", "study_count": 4, "pmids": ["28662719"]},
-        {"bacteria": "Prevotella", "condition": "Parkinson's Disease", "direction": "decreased", "study_count": 9, "pmids": ["28662719", "30075731"]},
+        {"bacteria": "Akkermansia", "condition": "Parkinson's Disease", "direction": "increased", "study_count": 6, "pmids": ["28449715"]},
+        {"bacteria": "Lactobacillus", "condition": "Parkinson's Disease", "direction": "increased", "study_count": 4, "pmids": ["28449715"]},
+        {"bacteria": "Prevotella", "condition": "Parkinson's Disease", "direction": "decreased", "study_count": 9, "pmids": ["28449715", "30075731"]},
         {"bacteria": "Faecalibacterium", "condition": "Parkinson's Disease", "direction": "decreased", "study_count": 5, "pmids": ["30075731"]},
         {"bacteria": "Roseburia", "condition": "Parkinson's Disease", "direction": "decreased", "study_count": 4, "pmids": ["30075731"]},
 
@@ -313,7 +313,7 @@ def create_gut_brain_species_data():
             "mental_health_associations": ["Depression", "Inflammation-related mood disorders"],
             "food_sources": ["Supported by high-fiber diet", "Resistant starch"],
             "research_strength": "Strong",
-            "pmid": "30518628"
+            "pmid": "38065935"
         },
         {
             "name": "Lactobacillus plantarum",
@@ -388,7 +388,7 @@ def create_gut_brain_species_data():
             "mental_health_associations": ["Parkinson's Disease", "Autism Spectrum", "Anxiety"],
             "food_sources": ["Plant-based diet", "High-fiber foods", "Whole grains"],
             "research_strength": "Strong",
-            "pmid": "28662719"
+            "pmid": "28449715"
         },
         {
             "name": "Clostridium species",
@@ -499,7 +499,7 @@ def save_json(data, filename):
 def main():
     """Main pipeline execution."""
     logging.info("=" * 60)
-    logging.info("GutBrain Explorer Data Pipeline")
+    logging.info("Gut-Brain Explorer Data Pipeline")
     logging.info("=" * 60)
     logging.info(f"Timestamp: {datetime.now().isoformat()}")
 

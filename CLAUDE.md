@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-GutBrain Explorer is a static web dashboard visualizing gut-brain axis research data. It demonstrates data engineering skills by aggregating microbiome research into interactive visualizations.
+Gut-Brain Explorer is a static web dashboard visualizing gut-brain axis research data. It demonstrates data engineering skills by aggregating microbiome research into interactive visualizations.
 
 ## Architecture
 

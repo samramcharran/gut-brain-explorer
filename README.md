@@ -1,10 +1,10 @@
-# GutBrain Explorer
+# Gut-Brain Explorer
 
 An interactive dashboard exploring the connection between gut bacteria and mental health conditions.
 
 ## Overview
 
-GutBrain Explorer is a data-driven web application that visualizes research findings from the gut-brain axis literature. It demonstrates how gut microbiome composition correlates with various mental health conditions, and how diet influences these microbial communities.
+Gut-Brain Explorer is a data-driven web application that visualizes research findings from the gut-brain axis literature. It demonstrates how gut microbiome composition correlates with various mental health conditions, and how diet influences these microbial communities.
 
 ### Features
 
@@ -52,20 +52,33 @@ python -m http.server 8000
 
 ## Data Sources
 
-All data comes from public, open-access sources:
+All data is manually curated from peer-reviewed sources:
 
-1. **BugSigDB** (https://bugsigdb.org)
-   - Curated database of published microbiome signatures
-   - CC0 license
-   - Contains gut-brain related studies
+1. **BugSigDB-Inspired Curation**
+   - Associations manually curated based on entries in BugSigDB (bugsigdb.org)
+   - Each association includes PubMed IDs for verification
+   - Note: This is not a live API integration
 
 2. **PubMed E-utilities API**
-   - Recent gut-brain axis research papers
-   - Free to use
+   - Fetches recent gut-brain axis research papers
+   - Used for the "Recent Papers" feature
 
-3. **Manual Curation**
-   - Diet-microbiome relationships from review papers
-   - All references cited
+3. **Review Literature**
+   - Diet-microbiome relationships from meta-analyses
+   - All references cited with PMIDs
+
+## Data Methodology
+
+### Bacteria-Condition Associations
+- Associations are manually curated from peer-reviewed studies
+- "Study count" represents an estimated number of supporting studies, not an exhaustive count
+- Effect direction (depleted/enriched/varied) based on consensus across cited studies
+- All claims are linked to PubMed IDs for verification
+
+### Limitations
+- This is an educational demonstration, not a comprehensive meta-analysis
+- Study counts are estimates and may not reflect all published research
+- Associations may vary by bacterial strain, study population, and methodology
 
 ## Project Structure
 
