@@ -113,8 +113,8 @@ def fetch_bugsigdb_data():
         {"bacteria": "Lactobacillus", "condition": "Depression", "direction": "decreased", "study_count": 12, "pmids": ["31563266", "30066368"]},
         {"bacteria": "Bifidobacterium", "condition": "Depression", "direction": "decreased", "study_count": 15, "pmids": ["31563266", "30066368"]},
         {"bacteria": "Faecalibacterium", "condition": "Depression", "direction": "decreased", "study_count": 8, "pmids": ["30518628"]},
-        {"bacteria": "Coprococcus", "condition": "Depression", "direction": "decreased", "study_count": 5, "pmids": ["30911743"]},
-        {"bacteria": "Dialister", "condition": "Depression", "direction": "decreased", "study_count": 4, "pmids": ["30911743"]},
+        {"bacteria": "Coprococcus", "condition": "Depression", "direction": "decreased", "study_count": 5, "pmids": ["30718848"]},
+        {"bacteria": "Dialister", "condition": "Depression", "direction": "decreased", "study_count": 4, "pmids": ["30718848"]},
         {"bacteria": "Eggerthella", "condition": "Depression", "direction": "increased", "study_count": 3, "pmids": ["31563266"]},
         {"bacteria": "Holdemania", "condition": "Depression", "direction": "increased", "study_count": 2, "pmids": ["33067419"]},
 
@@ -131,10 +131,10 @@ def fetch_bugsigdb_data():
         {"bacteria": "Akkermansia", "condition": "Stress", "direction": "decreased", "study_count": 3, "pmids": ["33067419"]},
 
         # Cognitive function associations (increased = higher levels associated with better cognition)
-        {"bacteria": "Akkermansia muciniphila", "condition": "Cognitive Function", "direction": "increased", "study_count": 5, "pmids": ["32355309"]},
+        {"bacteria": "Akkermansia muciniphila", "condition": "Cognitive Function", "direction": "increased", "study_count": 5, "pmids": ["32321934"]},
         {"bacteria": "Lactobacillus", "condition": "Cognitive Function", "direction": "increased", "study_count": 8, "pmids": ["30114969", "31164598"]},
         {"bacteria": "Bifidobacterium", "condition": "Cognitive Function", "direction": "increased", "study_count": 7, "pmids": ["30114969"]},
-        {"bacteria": "Roseburia", "condition": "Cognitive Function", "direction": "increased", "study_count": 3, "pmids": ["32355309"]},
+        {"bacteria": "Roseburia", "condition": "Cognitive Function", "direction": "increased", "study_count": 3, "pmids": ["32321934"]},
 
         # Autism Spectrum associations
         {"bacteria": "Clostridium", "condition": "Autism Spectrum", "direction": "increased", "study_count": 10, "pmids": ["28122648", "30356867"]},
@@ -153,7 +153,7 @@ def fetch_bugsigdb_data():
         # Alzheimer's Disease associations
         {"bacteria": "Bacteroides", "condition": "Alzheimer's Disease", "direction": "increased", "study_count": 4, "pmids": ["29396424"]},
         {"bacteria": "Bifidobacterium", "condition": "Alzheimer's Disease", "direction": "decreased", "study_count": 3, "pmids": ["29396424"]},
-        {"bacteria": "Lactobacillus", "condition": "Alzheimer's Disease", "direction": "varied", "study_count": 5, "pmids": ["29396424", "32355309"]},
+        {"bacteria": "Lactobacillus", "condition": "Alzheimer's Disease", "direction": "varied", "study_count": 5, "pmids": ["29396424", "32321934"]},
     ]
 
     print(f"  Loaded {len(bugsigdb_associations)} gut-brain associations")
@@ -298,7 +298,7 @@ def create_gut_brain_species_data():
             "mental_health_associations": ["Cognitive Function", "Neurodegeneration"],
             "food_sources": ["Supported by polyphenols (berries, green tea)", "Cranberries"],
             "research_strength": "Emerging",
-            "pmid": "32355309"
+            "pmid": "32321934"
         },
         {
             "name": "Faecalibacterium prausnitzii",
@@ -343,7 +343,7 @@ def create_gut_brain_species_data():
             "mental_health_associations": ["Depression", "Cognitive Function"],
             "food_sources": ["Supported by fiber-rich diet", "Whole grains"],
             "research_strength": "Moderate",
-            "pmid": "30911743"
+            "pmid": "30718848"
         },
         {
             "name": "Bacteroides fragilis",
@@ -373,7 +373,7 @@ def create_gut_brain_species_data():
             "mental_health_associations": ["Depression", "Quality of Life"],
             "food_sources": ["Supported by high-fiber diet"],
             "research_strength": "Emerging",
-            "pmid": "30911743"
+            "pmid": "30718848"
         },
         {
             "name": "Prevotella copri",

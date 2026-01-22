@@ -60,6 +60,8 @@
                     </div>
                 </div>
 
+                <p class="interaction-hint">Click on any data point to see details and references</p>
+
                 <div class="chart-container" role="img" aria-label="Interactive chart showing bacteria-condition associations. Use the controls above to filter data and change chart type.">
                     <canvas id="main-chart"></canvas>
                 </div>
@@ -67,17 +69,23 @@
                 <div class="chart-legend">
                     <div class="legend-item">
                         <span class="legend-dot beneficial"></span>
-                        <span>Beneficial/Depleted in condition</span>
+                        <span>Lower in condition (depleted)</span>
                     </div>
                     <div class="legend-item">
                         <span class="legend-dot enriched"></span>
-                        <span>Enriched in condition</span>
+                        <span>Higher in condition (enriched)</span>
                     </div>
                     <div class="legend-item">
                         <span class="legend-dot varied"></span>
-                        <span>Varied/Context-dependent</span>
+                        <span>Mixed results across studies</span>
                     </div>
                 </div>
+
+                <p class="legend-explanation">
+                    <strong>How to read this:</strong> Green means the bacteria is typically found at <em>lower levels</em>
+                    in people with the condition (potentially protective). Red means the bacteria is found at
+                    <em>higher levels</em> in people with the condition. Bubble size indicates number of studies.
+                </p>
 
                 <div id="association-details" class="association-details hidden">
                     <h3>Association Details</h3>

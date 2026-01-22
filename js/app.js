@@ -366,7 +366,14 @@ function showBarChartDetails(bacteria, associations, counts) {
 }
 
 function createHeatmap(data, conditionFilter = 'all', bacteriaFilter = 'all') {
-    const ctx = document.getElementById('main-chart').getContext('2d');
+    // Replace canvas with HTML table-based heatmap for true grid appearance
+    const chartContainer = document.querySelector('.chart-container');
+    const canvas = document.getElementById('main-chart');
+
+    if (mainChart) {
+        mainChart.destroy();
+        mainChart = null;
+    }
 
     let bacteria = data.bacteria;
     let conditions = data.conditions;
@@ -378,148 +385,112 @@ function createHeatmap(data, conditionFilter = 'all', bacteriaFilter = 'all') {
         conditions = [conditionFilter];
     }
 
-    // Create matrix
-    const matrix = [];
-    bacteria.forEach((b, bIndex) => {
-        conditions.forEach((c, cIndex) => {
-            const assoc = data.associations.find(a => a.bacteria === b && a.condition === c);
-            if (assoc) {
-                matrix.push({
-                    x: bIndex,
-                    y: cIndex,
-                    v: assoc.study_count,
-                    effect: assoc.effect,
-                    bacteria: b,
-                    condition: c,
-                    pmids: assoc.pmids
-                });
-            }
-        });
+    // Build lookup map
+    const assocMap = {};
+    data.associations.forEach(a => {
+        assocMap[`${a.bacteria}-${a.condition}`] = a;
     });
 
     // Calculate min/max for intensity scaling
-    const studyCounts = matrix.map(m => m.v);
+    const studyCounts = data.associations.map(a => a.study_count);
     const minCount = Math.min(...studyCounts);
     const maxCount = Math.max(...studyCounts);
 
-    // Helper to calculate opacity based on study count (0.3 to 1.0 range)
     function getIntensity(count) {
         if (maxCount === minCount) return 0.7;
         return 0.3 + (0.7 * (count - minCount) / (maxCount - minCount));
     }
 
-    // Helper to apply intensity to a color
-    function applyIntensity(baseColor, intensity) {
-        // Parse rgba color and adjust alpha
-        const match = baseColor.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*([\d.]+))?\)/);
-        if (match) {
-            const r = match[1], g = match[2], b = match[3];
-            return `rgba(${r}, ${g}, ${b}, ${intensity})`;
-        }
-        return baseColor;
+    function getColorForEffect(effect, intensity) {
+        const colors = {
+            depleted: { r: 64, g: 145, b: 108 },   // green
+            enriched: { r: 230, g: 57, b: 70 },     // red
+            varied: { r: 157, g: 78, b: 221 }       // purple
+        };
+        const c = colors[effect] || colors.varied;
+        return `rgba(${c.r}, ${c.g}, ${c.b}, ${intensity})`;
     }
 
-    // Use scatter chart with colored points to simulate heatmap
-    const heatmapData = matrix.map(m => ({
-        x: m.x,
-        y: m.y,
-        r: 18,
-        ...m
-    }));
+    // Create HTML table heatmap
+    let html = '<div class="heatmap-wrapper">';
+    html += '<table class="heatmap-table"><thead><tr><th></th>';
 
-    if (mainChart) {
-        mainChart.destroy();
-    }
-
-    mainChart = new Chart(ctx, {
-        type: 'bubble',
-        data: {
-            datasets: [{
-                data: heatmapData,
-                backgroundColor: heatmapData.map(d => {
-                    const colors = getEffectColor(d.effect);
-                    const intensity = getIntensity(d.v);
-                    return applyIntensity(colors.bg, intensity);
-                }),
-                borderColor: heatmapData.map(d => {
-                    const colors = getEffectColor(d.effect);
-                    return colors.border;
-                }),
-                borderWidth: 2
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: { display: false },
-                tooltip: {
-                    callbacks: {
-                        label: function(context) {
-                            const d = context.raw;
-                            return [
-                                `${d.bacteria} - ${d.condition}`,
-                                `Studies: ${d.v}`,
-                                `Effect: ${d.effect}`
-                            ];
-                        }
-                    }
-                }
-            },
-            scales: {
-                x: {
-                    type: 'linear',
-                    min: -0.5,
-                    max: bacteria.length - 0.5,
-                    ticks: {
-                        callback: function(value) {
-                            return bacteria[Math.round(value)] || '';
-                        },
-                        maxRotation: 45,
-                        minRotation: 45
-                    },
-                    title: {
-                        display: true,
-                        text: 'Bacteria Genus'
-                    }
-                },
-                y: {
-                    type: 'linear',
-                    min: -0.5,
-                    max: conditions.length - 0.5,
-                    ticks: {
-                        callback: function(value) {
-                            return conditions[Math.round(value)] || '';
-                        }
-                    },
-                    title: {
-                        display: true,
-                        text: 'Condition'
-                    }
-                }
-            },
-            onClick: function(event, elements) {
-                if (elements.length > 0) {
-                    const element = elements[0];
-                    const index = element.index;
-                    const point = heatmapData[index];
-                    showAssociationDetails({
-                        bacteria: point.bacteria,
-                        condition: point.condition,
-                        count: point.v,
-                        effect: point.effect,
-                        pmids: point.pmids
-                    });
-                }
-            }
-        }
+    // Header row with bacteria names
+    bacteria.forEach(b => {
+        html += `<th class="heatmap-header-cell">${escapeHtml(b)}</th>`;
     });
+    html += '</tr></thead><tbody>';
+
+    // Data rows
+    conditions.forEach(condition => {
+        html += `<tr><td class="heatmap-row-label">${escapeHtml(condition)}</td>`;
+        bacteria.forEach(bact => {
+            const key = `${bact}-${condition}`;
+            const assoc = assocMap[key];
+            if (assoc) {
+                const intensity = getIntensity(assoc.study_count);
+                const bgColor = getColorForEffect(assoc.effect, intensity);
+                const textColor = intensity > 0.6 ? 'white' : 'inherit';
+                html += `<td class="heatmap-cell" style="background-color: ${bgColor}; color: ${textColor};"
+                    data-bacteria="${escapeHtml(bact)}"
+                    data-condition="${escapeHtml(condition)}"
+                    data-count="${assoc.study_count}"
+                    data-effect="${assoc.effect}"
+                    data-pmids="${(assoc.pmids || []).join(',')}"
+                    title="${bact} + ${condition}: ${assoc.study_count} studies (${assoc.effect})">
+                    ${assoc.study_count}
+                </td>`;
+            } else {
+                html += '<td class="heatmap-cell heatmap-empty">-</td>';
+            }
+        });
+        html += '</tr>';
+    });
+
+    html += '</tbody></table>';
+    html += '<div class="heatmap-legend">';
+    html += '<span class="heatmap-legend-item"><span class="heatmap-swatch" style="background: rgba(64,145,108,0.7)"></span> Lower in condition</span>';
+    html += '<span class="heatmap-legend-item"><span class="heatmap-swatch" style="background: rgba(230,57,70,0.7)"></span> Higher in condition</span>';
+    html += '<span class="heatmap-legend-item"><span class="heatmap-swatch" style="background: rgba(157,78,221,0.7)"></span> Mixed results</span>';
+    html += '<span class="heatmap-legend-note">Cell color intensity = number of studies</span>';
+    html += '</div></div>';
+
+    // Replace chart container content
+    chartContainer.innerHTML = html;
+
+    // Add click handlers to cells
+    chartContainer.querySelectorAll('.heatmap-cell:not(.heatmap-empty)').forEach(cell => {
+        cell.addEventListener('click', function() {
+            const pmidsStr = this.dataset.pmids;
+            showAssociationDetails({
+                bacteria: this.dataset.bacteria,
+                condition: this.dataset.condition,
+                count: parseInt(this.dataset.count, 10),
+                effect: this.dataset.effect,
+                pmids: pmidsStr ? pmidsStr.split(',') : []
+            });
+        });
+    });
+}
+
+// Restore canvas when switching away from heatmap
+function restoreCanvas() {
+    const chartContainer = document.querySelector('.chart-container');
+    const existingCanvas = document.getElementById('main-chart');
+    if (!existingCanvas) {
+        chartContainer.innerHTML = '<canvas id="main-chart"></canvas>';
+    }
 }
 
 function updateChart() {
     const chartType = document.getElementById('chart-type').value;
     const conditionFilter = document.getElementById('condition-filter').value;
     const bacteriaFilter = document.getElementById('bacteria-filter').value;
+
+    // Restore canvas if switching from heatmap to chart view
+    if (chartType !== 'heatmap') {
+        restoreCanvas();
+    }
 
     switch (chartType) {
         case 'bubble':
@@ -612,25 +583,29 @@ function renderSpeciesCards() {
         card.className = 'species-card';
 
         const researchClass = species.research_strength.toLowerCase();
+        const pmid = species.pmid ? String(species.pmid).replace(/\D/g, '') : '';
 
         card.innerHTML = `
-            <span class="nickname">${species.nickname}</span>
-            <h3>${species.name}</h3>
-            <p class="description">${species.description}</p>
+            <span class="nickname">${escapeHtml(species.nickname)}</span>
+            <h3>${escapeHtml(species.name)}</h3>
+            <p class="description">${escapeHtml(species.description)}</p>
             <div class="findings">
                 <h4>Key Findings:</h4>
                 <ul>
-                    ${species.key_findings.map(f => `<li>${f}</li>`).join('')}
+                    ${species.key_findings.map(f => `<li>${escapeHtml(f)}</li>`).join('')}
                 </ul>
             </div>
             <div class="tags">
                 ${species.mental_health_associations.map(a =>
-                    `<span class="tag condition">${a}</span>`
+                    `<span class="tag condition">${escapeHtml(a)}</span>`
                 ).join('')}
             </div>
-            <span class="research-badge ${researchClass}">
-                ${species.research_strength} Evidence
-            </span>
+            <div class="card-footer">
+                <span class="research-badge ${researchClass}">
+                    ${escapeHtml(species.research_strength)} Evidence
+                </span>
+                ${pmid ? `<a href="https://pubmed.ncbi.nlm.nih.gov/${pmid}" target="_blank" class="reference-link">View Study (PMID: ${pmid})</a>` : ''}
+            </div>
         `;
 
         grid.appendChild(card);
@@ -645,6 +620,11 @@ function createDietChart() {
     const labels = dietData.map(d => d.diet_factor);
     const increasedCounts = dietData.map(d => d.bacteria_increased.length);
     const decreasedCounts = dietData.map(d => d.bacteria_decreased.length);
+
+    // Set canvas height based on number of items (40px per bar)
+    const chartContainer = document.querySelector('.diet-chart-container');
+    const minHeight = Math.max(300, labels.length * 45 + 80);
+    chartContainer.style.height = minHeight + 'px';
 
     if (dietChart) {
         dietChart.destroy();
@@ -689,6 +669,17 @@ function createDietChart() {
                     title: {
                         display: true,
                         text: 'Number of Bacteria Genera Affected'
+                    },
+                    beginAtZero: true,
+                    ticks: {
+                        stepSize: 1
+                    }
+                },
+                y: {
+                    ticks: {
+                        font: {
+                            size: 12
+                        }
                     }
                 }
             }

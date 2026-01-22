@@ -263,6 +263,120 @@ body {
     background: var(--varied);
 }
 
+.interaction-hint {
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    font-style: italic;
+    margin-bottom: var(--space-md);
+}
+
+.legend-explanation {
+    text-align: center;
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    max-width: 700px;
+    margin: var(--space-md) auto 0;
+    line-height: 1.5;
+}
+
+.legend-explanation em {
+    color: var(--text-primary);
+    font-style: normal;
+    font-weight: 500;
+}
+
+/* ===== Heatmap Table ===== */
+.heatmap-wrapper {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.heatmap-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+}
+
+.heatmap-table th,
+.heatmap-table td {
+    padding: var(--space-sm);
+    text-align: center;
+    border: 1px solid var(--border-light);
+}
+
+.heatmap-header-cell {
+    background: var(--bg-primary);
+    font-weight: 500;
+    color: var(--text-secondary);
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    transform: rotate(180deg);
+    height: 100px;
+    white-space: nowrap;
+    font-size: 0.8rem;
+}
+
+.heatmap-row-label {
+    background: var(--bg-primary);
+    font-weight: 500;
+    color: var(--text-secondary);
+    text-align: right !important;
+    padding-right: var(--space-md) !important;
+    white-space: nowrap;
+}
+
+.heatmap-cell {
+    min-width: 45px;
+    height: 40px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.heatmap-cell:not(.heatmap-empty):hover {
+    transform: scale(1.1);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    z-index: 10;
+    position: relative;
+}
+
+.heatmap-empty {
+    background: var(--bg-secondary);
+    color: var(--text-muted);
+    cursor: default;
+}
+
+.heatmap-legend {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-lg);
+    margin-top: var(--space-lg);
+    padding-top: var(--space-md);
+    border-top: 1px solid var(--border-light);
+}
+
+.heatmap-legend-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}
+
+.heatmap-swatch {
+    width: 16px;
+    height: 16px;
+    border-radius: var(--radius-sm);
+}
+
+.heatmap-legend-note {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    font-style: italic;
+}
+
 .association-details {
     background: var(--bg-card);
     border-radius: var(--radius-md);
@@ -407,6 +521,32 @@ body {
     color: var(--varied);
 }
 
+.card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+    margin-top: var(--space-md);
+    padding-top: var(--space-md);
+    border-top: 1px solid var(--border-light);
+}
+
+.reference-link {
+    font-size: 0.8rem;
+    color: var(--secondary);
+    text-decoration: none;
+    padding: var(--space-xs) var(--space-sm);
+    border: 1px solid var(--secondary);
+    border-radius: var(--radius-sm);
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.reference-link:hover {
+    background: var(--secondary);
+    color: white;
+}
+
 /* ===== Diet Section ===== */
 .diet-section {
     background: var(--bg-secondary);
@@ -418,7 +558,8 @@ body {
     padding: var(--space-xl);
     box-shadow: var(--shadow-md);
     margin-bottom: var(--space-xl);
-    max-height: 400px;
+    min-height: 350px;
+    height: auto;
 }
 
 .diet-cards {
