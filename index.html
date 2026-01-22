@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GutBrain Explorer | Exploring the Gut-Brain Axis</title>
+    <meta name="description" content="Interactive dashboard exploring the connection between gut bacteria and mental health conditions.">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <h1 class="logo">GutBrain Explorer</h1>
+                <p class="tagline">Exploring the Microbiome-Mind Connection</p>
+            </div>
+            <nav class="nav">
+                <a href="#explorer" class="nav-link">Explorer</a>
+                <a href="#species" class="nav-link">Key Species</a>
+                <a href="#diet" class="nav-link">Diet & Microbiome</a>
+                <a href="#about" class="nav-link">About</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero Section: Bacteria-Condition Explorer -->
+        <section id="explorer" class="section hero-section">
+            <div class="container">
+                <h2 class="section-title">Bacteria-Condition Explorer</h2>
+                <p class="section-description">
+                    Discover which gut bacteria are associated with mental health conditions.
+                    Data aggregated from peer-reviewed studies in the gut-brain axis literature.
+                </p>
+
+                <div class="explorer-controls">
+                    <div class="control-group">
+                        <label for="condition-filter">Filter by Condition:</label>
+                        <select id="condition-filter" class="filter-select">
+                            <option value="all">All Conditions</option>
+                        </select>
+                    </div>
+                    <div class="control-group">
+                        <label for="bacteria-filter">Filter by Bacteria:</label>
+                        <select id="bacteria-filter" class="filter-select">
+                            <option value="all">All Bacteria</option>
+                        </select>
+                    </div>
+                    <div class="control-group">
+                        <label for="chart-type">Chart Type:</label>
+                        <select id="chart-type" class="filter-select">
+                            <option value="bubble">Bubble Chart</option>
+                            <option value="bar">Bar Chart</option>
+                            <option value="heatmap">Heatmap</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <canvas id="main-chart"></canvas>
+                </div>
+
+                <div class="chart-legend">
+                    <div class="legend-item">
+                        <span class="legend-dot beneficial"></span>
+                        <span>Beneficial/Depleted in condition</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-dot enriched"></span>
+                        <span>Enriched in condition</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-dot varied"></span>
+                        <span>Varied/Context-dependent</span>
+                    </div>
+                </div>
+
+                <div id="association-details" class="association-details hidden">
+                    <h3>Association Details</h3>
+                    <div id="details-content"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Key Species Section -->
+        <section id="species" class="section species-section">
+            <div class="container">
+                <h2 class="section-title">Key Gut-Brain Species</h2>
+                <p class="section-description">
+                    Meet the most researched psychobiotics - bacteria with documented effects on mental health.
+                </p>
+
+                <div id="species-grid" class="species-grid">
+                    <!-- Species cards populated by JavaScript -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Diet & Microbiome Section -->
+        <section id="diet" class="section diet-section">
+            <div class="container">
+                <h2 class="section-title">Diet & Your Microbiome</h2>
+                <p class="section-description">
+                    What you eat shapes your gut bacteria. Explore how different dietary patterns
+                    influence your microbiome and mental well-being.
+                </p>
+
+                <div class="diet-chart-container">
+                    <canvas id="diet-chart"></canvas>
+                </div>
+
+                <div id="diet-cards" class="diet-cards">
+                    <!-- Diet cards populated by JavaScript -->
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" class="section about-section">
+            <div class="container">
+                <h2 class="section-title">About This Project</h2>
+
+                <div class="about-content">
+                    <div class="about-card">
+                        <h3>The Gut-Brain Axis</h3>
+                        <p>
+                            The gut-brain axis is a bidirectional communication network linking the
+                            central nervous system with the enteric nervous system of the gastrointestinal tract.
+                            Trillions of bacteria in our gut produce neurotransmitters, metabolites, and
+                            immune signals that influence our brain and behavior.
+                        </p>
+                    </div>
+
+                    <div class="about-card">
+                        <h3>Data Sources</h3>
+                        <ul>
+                            <li><strong>BugSigDB</strong> - Curated database of published microbiome signatures (CC0 license)</li>
+                            <li><strong>PubMed</strong> - Recent gut-brain axis research papers</li>
+                            <li><strong>Review Literature</strong> - Meta-analyses and systematic reviews on diet-microbiome relationships</li>
+                        </ul>
+                    </div>
+
+                    <div class="about-card">
+                        <h3>Technical Implementation</h3>
+                        <p>
+                            <strong>Data Pipeline:</strong> Python scripts fetch and normalize data from public APIs,
+                            transforming raw research data into clean JSON for visualization.
+                        </p>
+                        <p>
+                            <strong>Frontend:</strong> Static HTML/CSS/JavaScript with Chart.js for interactive visualizations.
+                            No build step required - just data engineering meets web accessibility.
+                        </p>
+                    </div>
+
+                    <div class="about-card highlight">
+                        <h3>Why GutBrain Explorer?</h3>
+                        <p>
+                            I built this project to demonstrate my passion for making complex biological data
+                            accessible to everyone. The gut-brain axis represents one of the most exciting
+                            frontiers in understanding human health - and I believe tools that help people
+                            explore this connection can empower better health decisions.
+                        </p>
+                        <p class="author">
+                            - Samantha
+                        </p>
+                    </div>
+                </div>
+
+                <div class="disclaimer">
+                    <strong>Note:</strong> This dashboard is for educational purposes only.
+                    The associations shown represent research findings and should not be interpreted as medical advice.
+                    Always consult healthcare professionals for health decisions.
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>GutBrain Explorer | Data from public sources | Built with curiosity</p>
+            <p class="footer-links">
+                <a href="https://github.com" target="_blank">View on GitHub</a>
+            </p>
+        </div>
+    </footer>
+
+    <script src="js/app.js"></script>
+</body>
+</html>

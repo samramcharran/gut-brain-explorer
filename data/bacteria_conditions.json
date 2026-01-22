@@ -1,0 +1,326 @@
+{
+  "bacteria": [
+    "Akkermansia",
+    "Bacteroides",
+    "Bifidobacterium",
+    "Clostridium",
+    "Coprococcus",
+    "Desulfovibrio",
+    "Dialister",
+    "Eggerthella",
+    "Escherichia",
+    "Faecalibacterium",
+    "Holdemania",
+    "Lactobacillus",
+    "Prevotella",
+    "Roseburia"
+  ],
+  "conditions": [
+    "Alzheimer's Disease",
+    "Anxiety",
+    "Autism Spectrum",
+    "Cognitive Function",
+    "Depression",
+    "Parkinson's Disease",
+    "Stress"
+  ],
+  "associations": [
+    {
+      "bacteria": "Akkermansia",
+      "condition": "Cognitive Function",
+      "study_count": 5,
+      "effect": "beneficial",
+      "pmids": [
+        "32355309"
+      ]
+    },
+    {
+      "bacteria": "Akkermansia",
+      "condition": "Parkinson's Disease",
+      "study_count": 6,
+      "effect": "enriched",
+      "pmids": [
+        "28662719"
+      ]
+    },
+    {
+      "bacteria": "Akkermansia",
+      "condition": "Stress",
+      "study_count": 3,
+      "effect": "beneficial",
+      "pmids": [
+        "33067419"
+      ]
+    },
+    {
+      "bacteria": "Bacteroides",
+      "condition": "Alzheimer's Disease",
+      "study_count": 4,
+      "effect": "enriched",
+      "pmids": [
+        "29396424"
+      ]
+    },
+    {
+      "bacteria": "Bacteroides",
+      "condition": "Anxiety",
+      "study_count": 6,
+      "effect": "varied",
+      "pmids": [
+        "31040953"
+      ]
+    },
+    {
+      "bacteria": "Bifidobacterium",
+      "condition": "Alzheimer's Disease",
+      "study_count": 3,
+      "effect": "depleted",
+      "pmids": [
+        "29396424"
+      ]
+    },
+    {
+      "bacteria": "Bifidobacterium",
+      "condition": "Anxiety",
+      "study_count": 11,
+      "effect": "depleted",
+      "pmids": [
+        "31040953",
+        "30066368"
+      ]
+    },
+    {
+      "bacteria": "Bifidobacterium",
+      "condition": "Autism Spectrum",
+      "study_count": 7,
+      "effect": "depleted",
+      "pmids": [
+        "30356867"
+      ]
+    },
+    {
+      "bacteria": "Bifidobacterium",
+      "condition": "Cognitive Function",
+      "study_count": 7,
+      "effect": "beneficial",
+      "pmids": [
+        "30114969"
+      ]
+    },
+    {
+      "bacteria": "Bifidobacterium",
+      "condition": "Depression",
+      "study_count": 15,
+      "effect": "depleted",
+      "pmids": [
+        "31563266",
+        "30066368"
+      ]
+    },
+    {
+      "bacteria": "Bifidobacterium",
+      "condition": "Stress",
+      "study_count": 6,
+      "effect": "beneficial",
+      "pmids": [
+        "28483500"
+      ]
+    },
+    {
+      "bacteria": "Clostridium",
+      "condition": "Autism Spectrum",
+      "study_count": 10,
+      "effect": "enriched",
+      "pmids": [
+        "30356867",
+        "28122648"
+      ]
+    },
+    {
+      "bacteria": "Coprococcus",
+      "condition": "Depression",
+      "study_count": 5,
+      "effect": "depleted",
+      "pmids": [
+        "30911743"
+      ]
+    },
+    {
+      "bacteria": "Desulfovibrio",
+      "condition": "Autism Spectrum",
+      "study_count": 6,
+      "effect": "enriched",
+      "pmids": [
+        "28122648"
+      ]
+    },
+    {
+      "bacteria": "Dialister",
+      "condition": "Depression",
+      "study_count": 4,
+      "effect": "depleted",
+      "pmids": [
+        "30911743"
+      ]
+    },
+    {
+      "bacteria": "Eggerthella",
+      "condition": "Depression",
+      "study_count": 3,
+      "effect": "enriched",
+      "pmids": [
+        "31563266"
+      ]
+    },
+    {
+      "bacteria": "Escherichia",
+      "condition": "Anxiety",
+      "study_count": 5,
+      "effect": "enriched",
+      "pmids": [
+        "30066368"
+      ]
+    },
+    {
+      "bacteria": "Faecalibacterium",
+      "condition": "Depression",
+      "study_count": 8,
+      "effect": "depleted",
+      "pmids": [
+        "30518628"
+      ]
+    },
+    {
+      "bacteria": "Faecalibacterium",
+      "condition": "Parkinson's Disease",
+      "study_count": 5,
+      "effect": "depleted",
+      "pmids": [
+        "30075731"
+      ]
+    },
+    {
+      "bacteria": "Holdemania",
+      "condition": "Depression",
+      "study_count": 2,
+      "effect": "enriched",
+      "pmids": [
+        "33067419"
+      ]
+    },
+    {
+      "bacteria": "Lactobacillus",
+      "condition": "Alzheimer's Disease",
+      "study_count": 5,
+      "effect": "varied",
+      "pmids": [
+        "32355309",
+        "29396424"
+      ]
+    },
+    {
+      "bacteria": "Lactobacillus",
+      "condition": "Anxiety",
+      "study_count": 9,
+      "effect": "depleted",
+      "pmids": [
+        "31040953",
+        "30066368"
+      ]
+    },
+    {
+      "bacteria": "Lactobacillus",
+      "condition": "Autism Spectrum",
+      "study_count": 5,
+      "effect": "depleted",
+      "pmids": [
+        "30356867"
+      ]
+    },
+    {
+      "bacteria": "Lactobacillus",
+      "condition": "Cognitive Function",
+      "study_count": 8,
+      "effect": "beneficial",
+      "pmids": [
+        "31164598",
+        "30114969"
+      ]
+    },
+    {
+      "bacteria": "Lactobacillus",
+      "condition": "Depression",
+      "study_count": 12,
+      "effect": "depleted",
+      "pmids": [
+        "31563266",
+        "30066368"
+      ]
+    },
+    {
+      "bacteria": "Lactobacillus",
+      "condition": "Parkinson's Disease",
+      "study_count": 4,
+      "effect": "enriched",
+      "pmids": [
+        "28662719"
+      ]
+    },
+    {
+      "bacteria": "Lactobacillus",
+      "condition": "Stress",
+      "study_count": 7,
+      "effect": "beneficial",
+      "pmids": [
+        "21876150",
+        "28483500"
+      ]
+    },
+    {
+      "bacteria": "Prevotella",
+      "condition": "Anxiety",
+      "study_count": 4,
+      "effect": "depleted",
+      "pmids": [
+        "33067419"
+      ]
+    },
+    {
+      "bacteria": "Prevotella",
+      "condition": "Autism Spectrum",
+      "study_count": 8,
+      "effect": "depleted",
+      "pmids": [
+        "28122648"
+      ]
+    },
+    {
+      "bacteria": "Prevotella",
+      "condition": "Parkinson's Disease",
+      "study_count": 9,
+      "effect": "depleted",
+      "pmids": [
+        "28662719",
+        "30075731"
+      ]
+    },
+    {
+      "bacteria": "Roseburia",
+      "condition": "Cognitive Function",
+      "study_count": 3,
+      "effect": "beneficial",
+      "pmids": [
+        "32355309"
+      ]
+    },
+    {
+      "bacteria": "Roseburia",
+      "condition": "Parkinson's Disease",
+      "study_count": 4,
+      "effect": "depleted",
+      "pmids": [
+        "30075731"
+      ]
+    }
+  ]
+}

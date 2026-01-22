@@ -1,0 +1,152 @@
+[
+  {
+    "diet_factor": "Fiber-rich foods",
+    "description": "Whole grains, legumes, vegetables",
+    "bacteria_increased": [
+      "Bifidobacterium",
+      "Lactobacillus",
+      "Faecalibacterium",
+      "Roseburia"
+    ],
+    "bacteria_decreased": [
+      "Clostridium",
+      "Enterococcus"
+    ],
+    "mechanism": "Prebiotic fermentation produces short-chain fatty acids (SCFAs)",
+    "mental_health_impact": "Positive - SCFAs support gut barrier and reduce inflammation",
+    "references": [
+      "PMID: 30664574",
+      "PMID: 31315227"
+    ]
+  },
+  {
+    "diet_factor": "Fermented foods",
+    "description": "Yogurt, kefir, kimchi, sauerkraut, kombucha",
+    "bacteria_increased": [
+      "Lactobacillus",
+      "Bifidobacterium",
+      "Streptococcus thermophilus"
+    ],
+    "bacteria_decreased": [],
+    "mechanism": "Direct introduction of beneficial bacteria and metabolites",
+    "mental_health_impact": "Positive - Reduces stress hormones, improves mood",
+    "references": [
+      "PMID: 27998788",
+      "PMID: 33147158"
+    ]
+  },
+  {
+    "diet_factor": "Mediterranean diet",
+    "description": "Olive oil, fish, vegetables, nuts, whole grains",
+    "bacteria_increased": [
+      "Faecalibacterium",
+      "Roseburia",
+      "Bacteroides",
+      "Prevotella"
+    ],
+    "bacteria_decreased": [
+      "Clostridium",
+      "Ruminococcus gnavus"
+    ],
+    "mechanism": "Anti-inflammatory, increases microbial diversity",
+    "mental_health_impact": "Positive - Associated with lower depression risk",
+    "references": [
+      "PMID: 30864356",
+      "PMID: 31728499"
+    ]
+  },
+  {
+    "diet_factor": "High-sugar diet",
+    "description": "Processed foods, sugary drinks, sweets",
+    "bacteria_increased": [
+      "Clostridium",
+      "Enterobacteriaceae",
+      "Proteobacteria"
+    ],
+    "bacteria_decreased": [
+      "Bacteroides",
+      "Bifidobacterium",
+      "Akkermansia"
+    ],
+    "mechanism": "Promotes inflammatory bacteria, damages gut barrier",
+    "mental_health_impact": "Negative - Associated with anxiety and depression",
+    "references": [
+      "PMID: 31540357",
+      "PMID: 30293932"
+    ]
+  },
+  {
+    "diet_factor": "High-fat Western diet",
+    "description": "Red meat, fried foods, processed foods",
+    "bacteria_increased": [
+      "Bilophila",
+      "Bacteroides",
+      "Alistipes"
+    ],
+    "bacteria_decreased": [
+      "Bifidobacterium",
+      "Lactobacillus",
+      "Akkermansia"
+    ],
+    "mechanism": "Increases bile-tolerant bacteria, promotes inflammation",
+    "mental_health_impact": "Negative - Linked to cognitive decline and depression",
+    "references": [
+      "PMID: 28388917",
+      "PMID: 30309508"
+    ]
+  },
+  {
+    "diet_factor": "Polyphenol-rich foods",
+    "description": "Berries, green tea, dark chocolate, red wine",
+    "bacteria_increased": [
+      "Akkermansia",
+      "Bifidobacterium",
+      "Lactobacillus"
+    ],
+    "bacteria_decreased": [
+      "Clostridium histolyticum"
+    ],
+    "mechanism": "Prebiotic effect, antioxidant and anti-inflammatory",
+    "mental_health_impact": "Positive - Neuroprotective effects",
+    "references": [
+      "PMID: 30720913",
+      "PMID: 31652531"
+    ]
+  },
+  {
+    "diet_factor": "Omega-3 fatty acids",
+    "description": "Fatty fish, flaxseed, walnuts",
+    "bacteria_increased": [
+      "Lactobacillus",
+      "Bifidobacterium",
+      "Roseburia"
+    ],
+    "bacteria_decreased": [
+      "Proteobacteria"
+    ],
+    "mechanism": "Anti-inflammatory, supports gut barrier integrity",
+    "mental_health_impact": "Positive - Reduces depression and anxiety symptoms",
+    "references": [
+      "PMID: 28954830",
+      "PMID: 31060907"
+    ]
+  },
+  {
+    "diet_factor": "Artificial sweeteners",
+    "description": "Aspartame, saccharin, sucralose",
+    "bacteria_increased": [
+      "Enterobacteriaceae",
+      "Clostridium"
+    ],
+    "bacteria_decreased": [
+      "Lactobacillus",
+      "Bifidobacterium"
+    ],
+    "mechanism": "May disrupt microbial balance and glucose metabolism",
+    "mental_health_impact": "Potentially negative - More research needed",
+    "references": [
+      "PMID: 25231862",
+      "PMID: 31504084"
+    ]
+  }
+]

@@ -1,0 +1,175 @@
+[
+  {
+    "name": "Lactobacillus rhamnosus",
+    "genus": "Lactobacillus",
+    "nickname": "The Stress Buster",
+    "description": "One of the most studied psychobiotics. Produces GABA (gamma-aminobutyric acid), a key inhibitory neurotransmitter. Shown to reduce anxiety and depression-like behaviors in animal studies.",
+    "key_findings": [
+      "Reduces cortisol response to stress",
+      "Modulates GABA receptors in the brain via the vagus nerve",
+      "Improves gut barrier function"
+    ],
+    "mental_health_associations": [
+      "Anxiety",
+      "Depression",
+      "Stress"
+    ],
+    "food_sources": [
+      "Yogurt",
+      "Kefir",
+      "Probiotic supplements"
+    ],
+    "research_strength": "Strong",
+    "pmid": "21876150"
+  },
+  {
+    "name": "Bifidobacterium longum",
+    "genus": "Bifidobacterium",
+    "nickname": "The Mood Lifter",
+    "description": "A dominant species in the healthy gut. Known for anti-inflammatory properties and ability to reduce anxiety. One of the first colonizers of the infant gut.",
+    "key_findings": [
+      "Reduces anxiety and improves memory in clinical trials",
+      "Produces B vitamins essential for brain function",
+      "Strengthens intestinal barrier"
+    ],
+    "mental_health_associations": [
+      "Anxiety",
+      "Cognitive Function",
+      "Depression"
+    ],
+    "food_sources": [
+      "Fermented vegetables",
+      "Yogurt",
+      "Human breast milk"
+    ],
+    "research_strength": "Strong",
+    "pmid": "28483500"
+  },
+  {
+    "name": "Akkermansia muciniphila",
+    "genus": "Akkermansia",
+    "nickname": "The Guardian",
+    "description": "Lives in the mucus layer of the gut. Essential for maintaining the gut barrier. Emerging research shows connections to brain health and metabolic function.",
+    "key_findings": [
+      "Strengthens gut barrier integrity",
+      "Associated with reduced inflammation",
+      "May protect against neurodegenerative diseases"
+    ],
+    "mental_health_associations": [
+      "Cognitive Function",
+      "Neurodegeneration"
+    ],
+    "food_sources": [
+      "Supported by polyphenols (berries, green tea)",
+      "Cranberries"
+    ],
+    "research_strength": "Emerging",
+    "pmid": "32355309"
+  },
+  {
+    "name": "Faecalibacterium prausnitzii",
+    "genus": "Faecalibacterium",
+    "nickname": "The Anti-Inflammatory",
+    "description": "One of the most abundant bacteria in the healthy human gut. Major producer of butyrate, which has anti-inflammatory effects throughout the body including the brain.",
+    "key_findings": [
+      "Primary butyrate producer in the colon",
+      "Consistently reduced in depression",
+      "Anti-inflammatory properties"
+    ],
+    "mental_health_associations": [
+      "Depression",
+      "Inflammation-related mood disorders"
+    ],
+    "food_sources": [
+      "Supported by high-fiber diet",
+      "Resistant starch"
+    ],
+    "research_strength": "Strong",
+    "pmid": "30518628"
+  },
+  {
+    "name": "Lactobacillus plantarum",
+    "genus": "Lactobacillus",
+    "nickname": "The Versatile One",
+    "description": "Highly adaptable species found in many fermented foods. Produces multiple neurotransmitters and has been studied for anxiety reduction.",
+    "key_findings": [
+      "Produces acetylcholine and GABA",
+      "Reduces anxiety in clinical trials",
+      "Improves cognitive function in stressed individuals"
+    ],
+    "mental_health_associations": [
+      "Anxiety",
+      "Stress",
+      "Cognitive Function"
+    ],
+    "food_sources": [
+      "Sauerkraut",
+      "Kimchi",
+      "Pickles",
+      "Sourdough"
+    ],
+    "research_strength": "Moderate",
+    "pmid": "31040953"
+  },
+  {
+    "name": "Roseburia intestinalis",
+    "genus": "Roseburia",
+    "nickname": "The Butyrate Maker",
+    "description": "Important butyrate-producing bacterium. Butyrate serves as fuel for colon cells and has neuroprotective effects via the gut-brain axis.",
+    "key_findings": [
+      "Major short-chain fatty acid producer",
+      "Associated with reduced depression risk",
+      "Supports gut barrier health"
+    ],
+    "mental_health_associations": [
+      "Depression",
+      "Cognitive Function"
+    ],
+    "food_sources": [
+      "Supported by fiber-rich diet",
+      "Whole grains"
+    ],
+    "research_strength": "Moderate",
+    "pmid": "30911743"
+  },
+  {
+    "name": "Bacteroides fragilis",
+    "genus": "Bacteroides",
+    "nickname": "The Immune Trainer",
+    "description": "A common gut resident that helps train the immune system. Research shows it may help correct autism-like behaviors in animal models.",
+    "key_findings": [
+      "Produces polysaccharide A that modulates immunity",
+      "May improve ASD symptoms in mice",
+      "Influences brain development"
+    ],
+    "mental_health_associations": [
+      "Autism Spectrum",
+      "Immune-Brain Axis"
+    ],
+    "food_sources": [
+      "Supported by varied plant-based diet"
+    ],
+    "research_strength": "Emerging",
+    "pmid": "24315484"
+  },
+  {
+    "name": "Coprococcus species",
+    "genus": "Coprococcus",
+    "nickname": "The Dopamine Link",
+    "description": "Recently identified as strongly associated with mental health. Studies show consistent depletion in individuals with depression.",
+    "key_findings": [
+      "Associated with dopamine metabolite production",
+      "Consistently low in depression across studies",
+      "Produces butyrate"
+    ],
+    "mental_health_associations": [
+      "Depression",
+      "Quality of Life"
+    ],
+    "food_sources": [
+      "Supported by high-fiber diet"
+    ],
+    "research_strength": "Emerging",
+    "pmid": "30911743"
+  }
+]
